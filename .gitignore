@@ -1,0 +1,6 @@
+.vs/
+Labb3/
+
+# ignore all bin / obj folders
+bin
+obj

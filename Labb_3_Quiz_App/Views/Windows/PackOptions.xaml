@@ -1,0 +1,61 @@
+﻿<Window x:Class="Labb_3_Quiz_App.View.Windows.PackOptions"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        mc:Ignorable="d"
+        WindowStyle="SingleBorderWindow"
+        Title="Pack Options" Height="190" Width="200">
+    <Window.Resources>
+        <!--<EnumToIntConverter x:Key="EnumToInt" />-->
+    </Window.Resources>
+    <Grid>
+        <Border Padding="10 5 10 0">
+            <StackPanel DataContext="{Binding ConfigViewModel}" >
+
+                <Label FontWeight="Bold" 
+                       Content="Pack Name:"
+                       Padding="2 5 0 1" />
+                <TextBox Text="{Binding ActivePack.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         ToolTip="Set pack name" />
+
+                <Label FontWeight="Bold" 
+                       Content="Difficulty"
+                       Padding="2 5 0 1" />
+                <ComboBox x:Name="difficulty"
+                          ToolTip="Set difficulty"
+                          SelectedValue="{Binding ActivePack.Difficulty}"
+                          ItemsSource="{Binding Difficulties}">
+                </ComboBox>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label FontWeight="Bold"
+                           Content="Time Limit:"
+                           Padding="2 5 0 0" 
+                           HorizontalAlignment="Left"/>
+
+                    <Label Grid.Column="1"
+                           Padding="0 5 2 0"
+                           Content="{Binding ElementName=timeSlider, Path=Value}"
+                           ContentStringFormat="{}{0} seconds"
+                           HorizontalAlignment="Right" />
+                </Grid>
+
+                <Slider x:Name="timeSlider"
+                        TickFrequency="5"
+                        TickPlacement="BottomRight"
+                        IsSnapToTickEnabled="True"
+                        Minimum="5"
+                        Maximum="120"
+                        Value="{Binding ActivePack.TimeLimitInSeconds}"
+                        Foreground="DarkGray" />
+            </StackPanel>
+        </Border>
+
+    </Grid>
+</Window>
