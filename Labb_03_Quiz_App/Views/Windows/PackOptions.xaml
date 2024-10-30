@@ -2,13 +2,22 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converters="clr-namespace:Labb_03_Quiz_App.Converters"
         mc:Ignorable="d"
         WindowStyle="SingleBorderWindow"
-        Title="Pack Options" Height="190" Width="200">
-    <Window.Resources>
-        <!--<EnumToIntConverter x:Key="EnumToInt" />-->
-    </Window.Resources>
+        Title="Pack Options" Height="190" Width="200"
+        FocusManager.FocusedElement="{Binding ElementName=SetPackName}">
+
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Close"
+                        Executed="CloseCommandHandler"/>
+    </Window.CommandBindings>
+
+    <Window.InputBindings>
+        <KeyBinding Key="Esc" Command="ApplicationCommands.Close" />
+    </Window.InputBindings>
+
     <Grid>
         <Border Padding="10 5 10 0">
             <StackPanel DataContext="{Binding ConfigViewModel}" >
@@ -16,8 +25,10 @@
                 <Label FontWeight="Bold" 
                        Content="Pack Name:"
                        Padding="2 5 0 1" />
-                <TextBox Text="{Binding ActivePack.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         ToolTip="Set pack name" />
+                <TextBox x:Name="SetPackName"
+                         Text="{Binding ActivePack.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         ToolTip="Set pack name"
+                         />
 
                 <Label FontWeight="Bold" 
                        Content="Difficulty"

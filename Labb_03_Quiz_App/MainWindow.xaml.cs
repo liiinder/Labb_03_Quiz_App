@@ -12,22 +12,11 @@ namespace Labb_03_Quiz_App
         public MainWindow()
         {
             InitializeComponent();
-
             DataContext = new MainWindowViewModel();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Fetch fetch = new();
-
-            fetch.ShowDialog();
-        }
-        private void Pack_Options(object sender, RoutedEventArgs e)
-        {
-            PackOptions pack = new();
-
-            pack.ShowDialog();
-        }
+        private void Button_Click(object sender, RoutedEventArgs e) => new Fetch().ShowDialog();
+        private void Pack_Options(object sender, RoutedEventArgs e) => new PackOptions().ShowDialog();
     }
 }
 

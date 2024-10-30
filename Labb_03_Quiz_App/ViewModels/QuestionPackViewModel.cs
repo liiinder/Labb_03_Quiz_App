@@ -1,6 +1,7 @@
 ﻿using Labb_03_Quiz_App.DataTypes;
 using Labb_03_Quiz_App.Models;
 using System.Collections.ObjectModel;
+using System.Text.Json.Serialization;
 
 namespace Labb_03_Quiz_App.ViewModels
 {
@@ -13,6 +14,16 @@ namespace Labb_03_Quiz_App.ViewModels
         {
             this.model = model;
             Questions = new ObservableCollection<Question>(model.Questions);
+        }
+
+        [JsonConstructorAttribute]
+        public QuestionPackViewModel(string name, Difficulty difficulty, int timeLimitInSeconds, ObservableCollection<Question> questions)
+        {
+            model = new QuestionPack();
+            Questions = questions;
+            model.Name = name;
+            model.Difficulty = difficulty;
+            model.TimeLimitInSeconds = timeLimitInSeconds;
         }
 
         public string Name

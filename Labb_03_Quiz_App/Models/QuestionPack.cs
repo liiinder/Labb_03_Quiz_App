@@ -6,14 +6,13 @@ internal class QuestionPack
     public string Name { get; set; }
     public Difficulty Difficulty { get; set; }
     public int TimeLimitInSeconds { get; set; }
-    public List<Question> Questions { get; set; } = new();
+    public List<Question> Questions { get; set; }
 
-    public QuestionPack(string name,
-                        Difficulty difficulty = Difficulty.Medium,
-                        int timeLimitInSeconds = 30)
+    public QuestionPack()
     {
-        Name = name;
-        Difficulty = difficulty;
-        TimeLimitInSeconds = timeLimitInSeconds;
+        Questions = new List<Question>();
+        Name = string.Empty;
+        Difficulty = Difficulty.Medium;
+        TimeLimitInSeconds = 30;
     }
 }

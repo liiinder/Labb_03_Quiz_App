@@ -1,6 +1,4 @@
-﻿using Labb_03_Quiz_App.View.Windows;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace Labb_03_Quiz_App.View.Controls
 {
@@ -13,12 +11,7 @@ namespace Labb_03_Quiz_App.View.Controls
         {
             InitializeComponent();
         }
-
-        private void Pack_Options(object sender, RoutedEventArgs e)
-        {
-            PackOptions pack = new();
-
-            pack.ShowDialog();
-        }
     }
 }
+
+//TODO: XAML ... Fatta varför DataContext behövs och vad RelativeSource betyder/menas med.. -->

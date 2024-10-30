@@ -4,6 +4,22 @@
              xmlns:local="clr-namespace:Labb_03_Quiz_App"
              StartupUri="MainWindow.xaml" >
     <Application.Resources>
-         
+        
+        <LinearGradientBrush x:Key="ButtonColor" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#fff" Offset="0.4" />
+            <GradientStop Color="#ddd" Offset="1.0" />
+        </LinearGradientBrush>
+
+        <Style x:Key="ButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="{StaticResource ButtonColor}" />
+            <Setter Property="BorderBrush" Value="#ccc" />
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Style.Resources>
+        </Style>
+        
     </Application.Resources>
+    
 </Application>

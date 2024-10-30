@@ -4,12 +4,24 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Labb_03_Quiz_App.View.Controls"
-             mc:Ignorable="d" 
+             xmlns:system="clr-namespace:System;assembly=netstandard"
+             mc:Ignorable="d"
+             DataContext="{Binding GameViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
-    <!--<UserControl.Resources>
-        <ButtonPadding />
-    </UserControl.Resources>-->
-    <Grid>
+
+    <UserControl.Resources>
+        <Style BasedOn="{StaticResource ButtonStyle}" TargetType="{x:Type Button}">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FF6A6A" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Thickness x:Key="ButtonMargin">5</Thickness>
+        <Thickness x:Key="ButtonPadding">0 25</Thickness>
+    </UserControl.Resources>
+    
+    <Grid Background="#edcdfa">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
@@ -22,10 +34,8 @@
         <Border Grid.Row="1"
                 Padding="80 0">
             <StackPanel>
-                <TextBox FontSize="30"
+                <TextBlock FontSize="30"
                          HorizontalAlignment="Center"
-                         BorderThickness="0"
-                         IsReadOnly="True"
                          TextWrapping="Wrap"
                          Text="Which of these songs is NOT in The Beatles&#039; album &quot;Sgt. Pepper&#039;s Lonely Hearts Club Band&quot;?"/>
                 <Label Content="Question 1 of 7" 
@@ -41,14 +51,42 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <Button Content="Getting Better" Grid.Row="0" Grid.Column="0" Margin="10"
-                            Padding="5"
-                            MinHeight="80"/>
-                    <Button Content="Strawberry Fields Forever"     Grid.Row="0" Grid.Column="1" Margin="10" />
-                    <Button Content="Fixing a Hole"                 Grid.Row="1" Grid.Column="0" Margin="10" />
-                    <Button Grid.Row="1" Grid.Column="1" Margin="15" Padding="5 20">
-                        <TextBlock Text="Lucy in the Sky with Diamonds Is a long answer and what happens"/>
+                    <Button Grid.Row="0" Grid.Column="0"
+                            Margin="{StaticResource ButtonMargin}"
+                            Padding="{StaticResource ButtonPadding}">
+                        <TextBlock HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   TextWrapping="Wrap" 
+                                   Text="Answer A:"/>
                     </Button>
+
+                    <Button Grid.Row="0" Grid.Column="1"
+                            Margin="{StaticResource ButtonMargin}"
+                            Padding="{StaticResource ButtonPadding}">
+                        <TextBlock HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   TextWrapping="Wrap" 
+                                   Text="Answer B:"/>
+                    </Button>
+
+                    <Button Grid.Row="1" Grid.Column="0" 
+                            Margin="{StaticResource ButtonMargin}"
+                            Padding="{StaticResource ButtonPadding}">
+                        <TextBlock HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   TextWrapping="Wrap" 
+                                   Text="Answer C:"/>
+                    </Button>
+
+                    <Button Grid.Row="1" Grid.Column="1"
+                            Margin="{StaticResource ButtonMargin}"
+                            Padding="{StaticResource ButtonPadding}">
+                        <TextBlock HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   TextWrapping="Wrap" 
+                                   Text="Answer D:"/>
+                    </Button>
+                    
                 </Grid>
             </StackPanel>
         </Border>
@@ -56,6 +94,18 @@
 </UserControl>
 <!-- 
     
+    This rectangle is painted with a diagonal linear gradient.
+    
+<Rectangle Width="200" Height="100">
+    <Rectangle.Fill>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="Yellow" Offset="0.0" />
+            <GradientStop Color="Red" Offset="0.25" />
+            <GradientStop Color="Blue" Offset="0.75" />
+            <GradientStop Color="LimeGreen" Offset="1.0" />
+        </LinearGradientBrush>
+    </Rectangle.Fill>
+</Rectangle>
 
 type: "multiple",
 difficulty: "medium",

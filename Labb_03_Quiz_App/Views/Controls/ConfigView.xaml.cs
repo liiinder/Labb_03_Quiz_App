@@ -1,6 +1,4 @@
-﻿using Labb_03_Quiz_App.View.Windows;
-using System.Collections;
-using System.Windows;
+﻿using System.Collections;
 using System.Windows.Controls;
 
 namespace Labb_03_Quiz_App.View.Controls
@@ -15,13 +13,11 @@ namespace Labb_03_Quiz_App.View.Controls
             InitializeComponent();
         }
 
-        private void Pack_Options(object sender, RoutedEventArgs e)
-        {
-            PackOptions pack = new();
-
-            pack.ShowDialog();
-        }
-
+        /// <summary>
+        /// This method is for the selections on the listbox to be clicked again to deselect and just have one selected at all time.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void questions_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (sender is ListBox box)
@@ -38,3 +34,6 @@ namespace Labb_03_Quiz_App.View.Controls
         }
     }
 }
+
+//TODO: Make selection of listbox able to select more than one with ctrl...
+// have the right form controll the last selected and delete will remove all.

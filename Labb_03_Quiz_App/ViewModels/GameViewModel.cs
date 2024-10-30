@@ -1,4 +1,5 @@
 ﻿using Labb_03_Quiz_App.Commands;
+using System.Windows;
 using System.Windows.Threading;
 
 namespace Labb_03_Quiz_App.ViewModels
@@ -7,6 +8,19 @@ namespace Labb_03_Quiz_App.ViewModels
     {
         private readonly MainWindowViewModel? mainWindowViewModel;
         private DispatcherTimer timer;
+
+        private Visibility _isVisible;
+        public Visibility IsVisible
+        {
+            get => _isVisible;
+            set
+            {
+                _isVisible = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        // Sen blanda ordningen på frågorna... Och innan man skriver ut svarsalternativen blanda dom.
 
         public QuestionPackViewModel? ActivePack { get; set; }
 
@@ -46,7 +60,7 @@ namespace Labb_03_Quiz_App.ViewModels
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += Timer_Tick;
             //timer.Start();
-
+            IsVisible = Visibility.Hidden;
             UpdateButtonCommand = new DelegateCommand(UpdateButton, CanUpdateButton);
         }
 
