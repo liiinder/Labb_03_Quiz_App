@@ -5,92 +5,172 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Labb_03_Quiz_App.View.Controls"
              xmlns:system="clr-namespace:System;assembly=netstandard"
+             xmlns:converters="clr-namespace:Labb_03_Quiz_App.Converters"
+             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              mc:Ignorable="d"
              DataContext="{Binding GameViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>
-        <Style BasedOn="{StaticResource ButtonStyle}" TargetType="{x:Type Button}">
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#FF6A6A" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+
+        <Style BasedOn="{StaticResource ButtonStyle}" TargetType="{x:Type Button}" />
+        <!--<Setter Property="Cursor" Value="Hand" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#55ADD8E6" />
+            </Trigger>
+        </Style.Triggers>-->
+
+
         <Thickness x:Key="ButtonMargin">5</Thickness>
         <Thickness x:Key="ButtonPadding">0 25</Thickness>
+
+        <converters:AnswerColorConverter x:Key="QuestionColorsConverter" />
+        <converters:NullToHiddenConverter x:Key="NullToHidden" />
+
     </UserControl.Resources>
-    
-    <Grid Background="#edcdfa">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Label x:Name="Timer"
-               Content="44"
-               FontWeight="Bold"
-               FontSize="30"
-               HorizontalAlignment="Right" />
-        <Border Grid.Row="1"
-                Padding="80 0">
-            <StackPanel>
-                <TextBlock FontSize="30"
-                         HorizontalAlignment="Center"
-                         TextWrapping="Wrap"
-                         Text="Which of these songs is NOT in The Beatles&#039; album &quot;Sgt. Pepper&#039;s Lonely Hearts Club Band&quot;?"/>
-                <Label Content="Question 1 of 7" 
-                       HorizontalAlignment="Center"
-                       />
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
+    <Grid Background="#FFF7E5FF">
+        
+        <Grid x:Name="Game"
+              Visibility="{Binding ShuffledUnansweredQuestions, Converter={StaticResource NullToHidden}}">
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            
+            <Label x:Name="Timer"
+                   Content="{Binding TimeLeft}"
+                   FontWeight="Bold"
+                   FontSize="30"
+                   HorizontalAlignment="Right" />
 
-                    <Button Grid.Row="0" Grid.Column="0"
-                            Margin="{StaticResource ButtonMargin}"
-                            Padding="{StaticResource ButtonPadding}">
-                        <TextBlock HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   TextWrapping="Wrap" 
-                                   Text="Answer A:"/>
-                    </Button>
+            <Border Grid.Row="1"
+                    VerticalAlignment="Bottom"
+                    Padding="80 0 80 80">
+                <StackPanel>
+                    <TextBlock FontSize="30"
+                               HorizontalAlignment="Center"
+                               TextWrapping="Wrap"
+                               TextAlignment="Center"
+                               Text="{Binding ActiveQuestion}" />
 
-                    <Button Grid.Row="0" Grid.Column="1"
-                            Margin="{StaticResource ButtonMargin}"
-                            Padding="{StaticResource ButtonPadding}">
-                        <TextBlock HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   TextWrapping="Wrap" 
-                                   Text="Answer B:"/>
-                    </Button>
+                    <TextBlock HorizontalAlignment="Center"
+                               Margin="0 20 0 0">
+                        <Run Text="Question"/>
+                        <Run Text="{Binding WhichQuestion}" FontWeight="Bold"/>
+                        <Run Text="of" />
+                        <Run Text="{Binding AmountOfQuestions}" FontWeight="Bold"/>
+                    </TextBlock>
 
-                    <Button Grid.Row="1" Grid.Column="0" 
-                            Margin="{StaticResource ButtonMargin}"
-                            Padding="{StaticResource ButtonPadding}">
-                        <TextBlock HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   TextWrapping="Wrap" 
-                                   Text="Answer C:"/>
-                    </Button>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
 
-                    <Button Grid.Row="1" Grid.Column="1"
-                            Margin="{StaticResource ButtonMargin}"
-                            Padding="{StaticResource ButtonPadding}">
-                        <TextBlock HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   TextWrapping="Wrap" 
-                                   Text="Answer D:"/>
-                    </Button>
+                        <Border Grid.Row="0" Grid.Column="0"
+                                Margin="2"
+                                CornerRadius="5"
+                                Background="{Binding ActiveAnswers[0].Color, Converter={StaticResource QuestionColorsConverter}}">
+                            <Button Command="{Binding GuessAnswerCommand}" 
+                                    CommandParameter="{Binding ActiveAnswers[0]}"
+                                    Margin="{StaticResource ButtonMargin}"
+                                    Padding="{StaticResource ButtonPadding}">
+                                <TextBlock HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           TextWrapping="Wrap"
+                                           Text="{Binding ActiveAnswers[0].Text}" />
+                            </Button>
+                        </Border>
+
+                        <Border Grid.Row="0" Grid.Column="1"
+                                Margin="2"
+                                CornerRadius="5"
+                                Background="{Binding ActiveAnswers[1].Color, Converter={StaticResource QuestionColorsConverter}}">
+                            <Button Command="{Binding GuessAnswerCommand}"
+                                    CommandParameter="{Binding ActiveAnswers[1]}"
+                                    Margin="{StaticResource ButtonMargin}"
+                                    Padding="{StaticResource ButtonPadding}">
+                                <TextBlock HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           TextWrapping="Wrap" 
+                                           Text="{Binding ActiveAnswers[1].Text}" />
+                            </Button>
+                        </Border>
+
+                        <Border Grid.Row="1" Grid.Column="0"
+                                Margin="2"
+                                CornerRadius="5"
+                                Background="{Binding ActiveAnswers[2].Color, Converter={StaticResource QuestionColorsConverter}}">
+                            <Button Command="{Binding GuessAnswerCommand}"
+                                    CommandParameter="{Binding ActiveAnswers[2]}"
+                                    Margin="{StaticResource ButtonMargin}"
+                                    Padding="{StaticResource ButtonPadding}">
+                                <TextBlock HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           TextWrapping="Wrap" 
+                                           Text="{Binding ActiveAnswers[2].Text}" />
+                            </Button>
+                        </Border>
+
+                        <Border Grid.Row="1" Grid.Column="1"
+                                CornerRadius="5"
+                                Margin="2"
+                                Background="{Binding ActiveAnswers[3].Color, Converter={StaticResource QuestionColorsConverter}}">
+                            <Button Command="{Binding GuessAnswerCommand}"
+                                    CommandParameter="{Binding ActiveAnswers[3]}"
+                                    Margin="{StaticResource ButtonMargin}"
+                                    Padding="{StaticResource ButtonPadding}">
+                                <TextBlock HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       TextWrapping="Wrap" 
+                                       Text="{Binding ActiveAnswers[3].Text}"/>
+                            </Button>
+                        </Border>
+                        
+                    </Grid>
                     
-                </Grid>
-            </StackPanel>
-        </Border>
+                </StackPanel>
+                
+            </Border>
+            
+        </Grid>
+        
+        <Grid Visibility="{Binding ResultScreen, Converter={StaticResource NullToHidden}}">
+            <Border>
+                <StackPanel>
+                    <TextBlock Margin="0 100 0 0"
+                               FontSize="30"
+                               HorizontalAlignment="Center"
+                               TextWrapping="Wrap" 
+                               Text="{Binding ActivePack.Name}" />
+
+                    <TextBlock HorizontalAlignment="Center"
+                               Margin="0 10">
+                        <Run Text="You got"/>
+                        <Run Text="{Binding CorrectGuesses}" FontWeight="Bold"/>
+                        <Run Text="of" />
+                        <Run Text="{Binding AmountOfQuestions}" FontWeight="Bold"/>
+                        <Run Text="answers correct!" />
+                    </TextBlock>
+
+                    <Button Content="{fa:Icon Repeat}"
+                            FontSize="24"
+                            Margin="50"
+                            Width="100"
+                            Height="75"
+                            Command="{Binding RepeatQuizCommand}"/>
+
+                </StackPanel>
+            </Border>
+        </Grid>
     </Grid>
+    
 </UserControl>
 <!-- 
     

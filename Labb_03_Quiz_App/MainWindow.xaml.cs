@@ -9,14 +9,21 @@ namespace Labb_03_Quiz_App
     /// </summary>
     public partial class MainWindow : Window
     {
+        private MainWindowViewModel mainWindowVM { get; }
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainWindowViewModel();
+            mainWindowVM = new MainWindowViewModel();
+            DataContext = mainWindowVM;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) => new Fetch().ShowDialog();
         private void Pack_Options(object sender, RoutedEventArgs e) => new PackOptions().ShowDialog();
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            mainWindowVM.ExitWindowCommand.Execute(null);
+        }
     }
 }
 

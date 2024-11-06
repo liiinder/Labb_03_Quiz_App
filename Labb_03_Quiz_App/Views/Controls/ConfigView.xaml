@@ -24,23 +24,26 @@
         
     </UserControl.Resources>
 
-    <Grid Background="#cdfaf7">
+    <Grid Background="#FFDFF8F7">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-        <Border Padding="10 10 0 10"
+        <!-- Vänstra sidan -->
+        
+        <Border Padding="10 10 0 0"
                 Visibility="{Binding ActivePack, Converter={StaticResource NullToHidden}}">
+
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
                 
                 <Label FontWeight="Bold"
                        Content="{Binding ActivePack.Name}"
@@ -63,45 +66,55 @@
                             Margin="5 5 5 5" />
                     
                 </StackPanel>
-               
-                <ListBox x:Name="questions"
-                     Grid.Row="1"
-                     Grid.ColumnSpan="2"
-                     HorizontalAlignment="Stretch"
-                     SelectionMode="Multiple"
-                     SelectionChanged="questions_SelectionChanged"
-                     ItemsSource="{Binding ActivePack.Questions}"
-                     SelectedItem="{Binding SelectedQuestion, Mode=TwoWay}">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel>
-                                <TextBlock Text="Question"
-                                           FontWeight="Bold"/>
-                                <TextBlock Text="{Binding Query}" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
             </Grid>
         </Border>
+               
+        <ListBox x:Name="questions"
+                Grid.Row="1"
+                HorizontalAlignment="Stretch"
+                SelectionMode="Multiple"
+                SelectionChanged="questions_SelectionChanged"
+                ItemsSource="{Binding ActivePack.Questions}"
+                SelectedItem="{Binding SelectedQuestion, Mode=TwoWay}"
+                Margin="10 0 0 10"
+                Visibility="{Binding ActivePack, Converter={StaticResource NullToHidden}}">
+            
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="Question"
+                                    FontWeight="Bold"/>
+                        <TextBlock Text="{Binding Query}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            
+        </ListBox>
+            
 
         <!-- Högra Sidan -->
+
+        <Border Padding="10 10 10 0"
+                Grid.Column="1"
+                Visibility="{Binding SelectedQuestion, Converter={StaticResource NullToHidden}}">
+            
+            <Label FontWeight="Bold"
+                   Content="Question:"
+                   VerticalAlignment="Bottom" />
+        </Border>
         
-        <Border Grid.Column="1" 
+        <Border Grid.Column="1"
                 Grid.Row="1"
-                Padding="10"
+                Padding="10 0 10 0"
                 Visibility="{Binding SelectedQuestion, Converter={StaticResource NullToHidden}}">
             <StackPanel>
-                <Label FontWeight="Bold"
-                       Content="Question:"
-                       Padding="5 39 0 0"/>
-                <TextBox Height="100"
-                         Margin="0 5 0 0" 
+                <TextBox Height="100" 
                          Text="{Binding SelectedQuestion.Query, UpdateSourceTrigger=PropertyChanged}" />
 
                 <Label FontWeight="Bold"
                     Content="Correct Answer:"/>
                 <TextBox Text="{Binding SelectedQuestion.CorrectAnswer, UpdateSourceTrigger=PropertyChanged}" />
+                
                 <Label FontWeight="Bold"
                     Content="Incorrect Answers:"/>
                 <TextBox Text="{Binding SelectedQuestion.IncorrectAnswers[0], UpdateSourceTrigger=PropertyChanged}" />
@@ -109,6 +122,7 @@
                          Margin="0 5 0 0"/>
                 <TextBox Text="{Binding SelectedQuestion.IncorrectAnswers[2], UpdateSourceTrigger=PropertyChanged}"
                          Margin="0 5 0 0"/>
+                
             </StackPanel>
         </Border>
 

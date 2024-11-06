@@ -2,7 +2,6 @@
 using Labb_03_Quiz_App.DataTypes;
 using Labb_03_Quiz_App.Models;
 using Labb_03_Quiz_App.View.Windows;
-using System.Windows;
 
 namespace Labb_03_Quiz_App.ViewModels
 {
@@ -10,6 +9,7 @@ namespace Labb_03_Quiz_App.ViewModels
     {
         private readonly MainWindowViewModel? mainWindowViewModel;
         public QuestionPackViewModel? ActivePack { get => mainWindowViewModel?.ActivePack; }
+        public bool? IsActive { get => mainWindowViewModel?.InConfigMode; }
         public List<Difficulty> Difficulties { get; set; }
 
         private Question? _selectedQuestion;
@@ -19,17 +19,6 @@ namespace Labb_03_Quiz_App.ViewModels
             set
             {
                 _selectedQuestion = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        private Visibility _isVisible;
-        public Visibility IsVisible
-        {
-            get => _isVisible;
-            set
-            {
-                _isVisible = value;
                 RaisePropertyChanged();
             }
         }
@@ -46,7 +35,6 @@ namespace Labb_03_Quiz_App.ViewModels
             DeleteQuestionCommand = new DelegateCommand(DeleteQuestion);
             PackOptionsCommand = new DelegateCommand(PackOptions);
             Difficulties = Enum.GetValues(typeof(Difficulty)).Cast<Difficulty>().ToList();
-            IsVisible = Visibility.Visible;
         }
 
         private void AddQuestion(object obj) => ActivePack?.Questions.Add(new Question());

@@ -19,18 +19,21 @@
             <MenuItem Header="_File">
                 <MenuItem Header="_New Question Pack" 
                           Icon="{fa:Icon FolderPlus}" 
-                          Command="{Binding AddNewPackCommand}"/>
+                          Command="{Binding AddNewPackCommand}" 
+                          IsEnabled="{Binding InConfigMode}"/>
 
                 <MenuItem Header="_Select Question Pack" 
                           Icon="{fa:Icon FolderOpen}"
-                          ItemsSource="{Binding Packs}">
+                          ItemsSource="{Binding Packs}"
+                          IsEnabled="{Binding InConfigMode}">
                     <MenuItem.ItemContainerStyle>
                         <Style TargetType="MenuItem">
                             <Setter Property="Header">
                                 <Setter.Value>
                                     <MultiBinding Converter="{StaticResource SelectPackName}">
-                                        <Binding Path="Name"/>
-                                        <Binding Path="Difficulty"/>
+                                        <Binding Path="Name" />
+                                        <Binding Path="Difficulty" />
+                                        <Binding Path="Questions" />
                                     </MultiBinding>
                                 </Setter.Value>
                             </Setter>
@@ -44,10 +47,13 @@
 
                 <MenuItem Header="_Delete Question Pack" 
                           Icon="{fa:Icon FolderMinus}"
-                          Command="{Binding DeletePackCommand}"/>
+                          Command="{Binding DeletePackCommand}"
+                          IsEnabled="{Binding InConfigMode}" />
                 <Separator/>
                 <MenuItem Header="_Import Questions" InputGestureText="Ctrl+I" 
-                          Icon="{fa:Icon CloudArrowDown}" />
+                          Icon="{fa:Icon CloudArrowDown}" 
+                          IsEnabled="{Binding InConfigMode}" 
+                          Command="{Binding ImportQuestionsCommand}"/>
                 <Separator/>
                 <MenuItem Header="_Exit" InputGestureText="Alt+F4"
                           Icon="{fa:Icon DoorOpen}" 
@@ -55,31 +61,38 @@
             </MenuItem>
 
             <MenuItem Header="_Edit"
-                      DataContext="{Binding ConfigViewModel}">
+                      DataContext="{Binding ConfigViewModel}"
+                      IsEnabled="{Binding IsActive}">
+                
                 <MenuItem Header="_Add Question" 
                           Command="{Binding AddQuestionCommand}"
                           InputGestureText="Insert"
                           Icon="{fa:Icon Plus}" />
+                
                 <MenuItem Header="_Remove Question" 
                           Command="{Binding DeleteQuestionCommand}"
                           InputGestureText="Delete" 
                           Icon="{fa:Icon Minus}" />
+                
                 <MenuItem Header="Pack _Options"
                           Command="{Binding PackOptionsCommand}"
                           InputGestureText="Ctrl+O" 
                           Icon="{fa:Icon Sliders}" />
+                
             </MenuItem>
 
             <MenuItem Header="_View">
                 <MenuItem Header="_Play" InputGestureText="Ctrl+P" 
                           Icon="{fa:Icon Play}"
                           Command="{Binding SwitchModeCommand}"
-                          CommandParameter="GameMode" />
+                          CommandParameter="GameMode" 
+                          IsEnabled="{Binding InConfigMode}"/>
 
                 <MenuItem Header="_Edit" InputGestureText="Ctrl+E" 
                           Icon="{fa:Icon Gears}"
                           Command="{Binding SwitchModeCommand}"
-                          CommandParameter="ConfigMode" />
+                          CommandParameter="ConfigMode" 
+                          IsEnabled="{Binding InGameMode}"/>
              
                 <Separator/>
                 <MenuItem Header="_Fullscreen" InputGestureText="Alt+Enter"

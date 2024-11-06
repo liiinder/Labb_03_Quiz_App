@@ -16,7 +16,7 @@ namespace Labb_03_Quiz_App.ViewModels
             Questions = new ObservableCollection<Question>(model.Questions);
         }
 
-        [JsonConstructorAttribute]
+        [JsonConstructor]
         public QuestionPackViewModel(string name, Difficulty difficulty, int timeLimitInSeconds, ObservableCollection<Question> questions)
         {
             model = new QuestionPack();
