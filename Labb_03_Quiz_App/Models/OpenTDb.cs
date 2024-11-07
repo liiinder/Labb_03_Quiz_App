@@ -11,6 +11,7 @@
             this.response_code = response_code;
             this.results = results;
         }
-        
     }
 }
+
+//TODO: Currently not in use... Implement this.

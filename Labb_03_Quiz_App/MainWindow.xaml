@@ -13,7 +13,7 @@
         WindowStartupLocation="CenterScreen"
         Icon="{fa:IconSource Brain, Foreground=LightPink}"
         Title="Quiz App" Height="500" Width="800">
-    
+
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
     </Window.Resources>
@@ -26,22 +26,16 @@
         <KeyBinding Key="Enter" Modifiers="Alt" Command="{Binding FullScreenCommand}" />
     </Window.InputBindings>
     <Grid>
-        
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        
+
         <controls:MenuView />
         <controls:ConfigView Grid.Row="1" Visibility="{Binding IsActive, Converter={StaticResource BoolToVisibility}}" />
         <controls:GameView Grid.Row="1" Visibility="{Binding IsActive, Converter={StaticResource BoolToVisibility}}" />
-        
-    </Grid>
-    
-</Window>
 
-<!--
-    
-    https://learn.microsoft.com/en-us/dotnet/desktop/wpf/data/how-to-create-a-simple-binding?view=netdesktop-8.0
-    
-    -->
+    </Grid>
+
+</Window>
