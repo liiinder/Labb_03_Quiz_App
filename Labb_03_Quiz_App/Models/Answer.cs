@@ -11,9 +11,6 @@
             Color = color;
         }
 
-        public override string ToString()
-        {
-            return Text;
-        }
+        public override string ToString() => Text;
     }
 }

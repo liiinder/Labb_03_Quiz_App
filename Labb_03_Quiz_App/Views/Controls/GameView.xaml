@@ -12,28 +12,46 @@
              d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>
-
-        <Style BasedOn="{StaticResource ButtonStyle}" TargetType="{x:Type Button}" />
-
-        <Thickness x:Key="ButtonMargin">5</Thickness>
-        <Thickness x:Key="ButtonPadding">0 25</Thickness>
+        
+        <system:Double x:Key="ImageDimentions">45</system:Double>
 
         <converters:AnswerColorConverter x:Key="AnswerColor" />
         <converters:AnswerImageConverter x:Key="AnswerImage" />
         <converters:NullToHiddenConverter x:Key="NullToHidden" />
+        
+        <Style TargetType="Border" x:Key="ButtonBorder">
+            <Setter Property="Margin" Value="7" />
+            <Setter Property="CornerRadius" Value="7" />
+        </Style>
 
+        <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="MinHeight" Value="70" />
+        </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        
         <Style TargetType="Image">
-            <Setter Property="Width" Value="40" />
-            <Setter Property="Height" Value="40" />
+            <Setter Property="Width" Value="{StaticResource ImageDimentions}" />
+            <Setter Property="Height" Value="{StaticResource ImageDimentions}" />
             <Setter Property="HorizontalAlignment" Value="Right" />
             <Setter Property="VerticalAlignment" Value="Top" />
         </Style>
 
+        <Style TargetType="Run" x:Key="ChangeableNumbers">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="Medium" />
+        </Style>
+
     </UserControl.Resources>
+    
     <Grid Background="#FFF7E5FF">
 
-        <Grid x:Name="Game"
-              Visibility="{Binding ShuffledUnansweredQuestions, Converter={StaticResource NullToHidden}}">
+        <Grid Visibility="{Binding UnansweredQuestions, Converter={StaticResource NullToHidden}}">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
@@ -50,18 +68,13 @@
                     VerticalAlignment="Bottom"
                     Padding="80 0 80 80">
                 <StackPanel>
-                    <TextBlock FontSize="30"
-                               HorizontalAlignment="Center"
-                               TextWrapping="Wrap"
-                               TextAlignment="Center"
-                               Text="{Binding ActiveQuestion}" />
+                    <TextBlock FontSize="30" Text="{Binding ActiveQuestion}" />
 
-                    <TextBlock HorizontalAlignment="Center"
-                               Margin="0 20 0 0">
+                    <TextBlock Margin="0 20 0 0">
                         <Run Text="Question"/>
-                        <Run Text="{Binding WhichQuestion}" FontWeight="Bold"/>
+                        <Run Text="{Binding QuestionIndex}" Style="{StaticResource ChangeableNumbers}"/>
                         <Run Text="of" />
-                        <Run Text="{Binding AmountOfQuestions}" FontWeight="Bold"/>
+                        <Run Text="{Binding AmountOfQuestions}" Style="{StaticResource ChangeableNumbers}"/>
                     </TextBlock>
 
                     <Grid>
@@ -75,105 +88,76 @@
                         </Grid.RowDefinitions>
 
                         <Border Grid.Row="0" Grid.Column="0"
-                                Margin="2"
-                                CornerRadius="5"
+                                Style="{StaticResource ButtonBorder}"
                                 Background="{Binding ActiveAnswers[0].Color, Converter={StaticResource AnswerColor}}">
                             <Button Command="{Binding GuessAnswerCommand}" 
-                                    CommandParameter="{Binding ActiveAnswers[0]}"
-                                    Margin="{StaticResource ButtonMargin}"
-                                    Padding="{StaticResource ButtonPadding}">
-                                <TextBlock HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           TextWrapping="Wrap"
-                                           Text="{Binding ActiveAnswers[0].Text}" />
+                                    CommandParameter="{Binding ActiveAnswers[0]}">
+                                <TextBlock Text="{Binding ActiveAnswers[0].Text}" />
                             </Button>
                         </Border>
 
                         <Border Grid.Row="0" Grid.Column="1"
-                                Margin="2"
-                                CornerRadius="5"
+                                Style="{StaticResource ButtonBorder}"
                                 Background="{Binding ActiveAnswers[1].Color, Converter={StaticResource AnswerColor}}">
                             <Button Command="{Binding GuessAnswerCommand}"
-                                    CommandParameter="{Binding ActiveAnswers[1]}"
-                                    Margin="{StaticResource ButtonMargin}"
-                                    Padding="{StaticResource ButtonPadding}">
-                                <TextBlock HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           TextWrapping="Wrap" 
-                                           Text="{Binding ActiveAnswers[1].Text}" />
+                                    CommandParameter="{Binding ActiveAnswers[1]}">
+                                <TextBlock Text="{Binding ActiveAnswers[1].Text}" />
                             </Button>
                         </Border>
 
                         <Border Grid.Row="1" Grid.Column="0"
-                                Margin="2"
-                                CornerRadius="5"
+                                Style="{StaticResource ButtonBorder}"
                                 Background="{Binding ActiveAnswers[2].Color, Converter={StaticResource AnswerColor}}">
                             <Button Command="{Binding GuessAnswerCommand}"
-                                    CommandParameter="{Binding ActiveAnswers[2]}"
-                                    Margin="{StaticResource ButtonMargin}"
-                                    Padding="{StaticResource ButtonPadding}">
-                                <TextBlock HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           TextWrapping="Wrap" 
-                                           Text="{Binding ActiveAnswers[2].Text}" />
+                                    CommandParameter="{Binding ActiveAnswers[2]}">
+                                <TextBlock Text="{Binding ActiveAnswers[2].Text}" />
                             </Button>
                         </Border>
 
                         <Border Grid.Row="1" Grid.Column="1"
-                                CornerRadius="5"
-                                Margin="2"
+                                Style="{StaticResource ButtonBorder}"
                                 Background="{Binding ActiveAnswers[3].Color, Converter={StaticResource AnswerColor}}">
                             <Button Command="{Binding GuessAnswerCommand}"
-                                    CommandParameter="{Binding ActiveAnswers[3]}"
-                                    Margin="{StaticResource ButtonMargin}"
-                                    Padding="{StaticResource ButtonPadding}">
-                                <TextBlock HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       TextWrapping="Wrap" 
-                                       Text="{Binding ActiveAnswers[3].Text}"/>
+                                    CommandParameter="{Binding ActiveAnswers[3]}">
+                                <TextBlock Text="{Binding ActiveAnswers[3].Text}"/>
                             </Button>
                         </Border>
 
-                        <Image Source="{Binding ActiveAnswers[0].Color, Converter={StaticResource AnswerImage}}" 
-                               Grid.Row="0" Grid.Column="0" />
-                        <Image Source="{Binding ActiveAnswers[1].Color, Converter={StaticResource AnswerImage}}"
-                               Grid.Row="0" Grid.Column="1" />
-                        <Image Source="{Binding ActiveAnswers[2].Color, Converter={StaticResource AnswerImage}}"
-                               Grid.Row="1" Grid.Column="0" />
-                        <Image Source="{Binding ActiveAnswers[3].Color, Converter={StaticResource AnswerImage}}"
-                                Grid.Row="1" Grid.Column="1" />
+                        <Image Grid.Row="0" Grid.Column="0" 
+                               Source="{Binding ActiveAnswers[0].Color, Converter={StaticResource AnswerImage}}" />
+                        <Image Grid.Row="0" Grid.Column="1" 
+                               Source="{Binding ActiveAnswers[1].Color, Converter={StaticResource AnswerImage}}" />
+                        <Image Grid.Row="1" Grid.Column="0" 
+                               Source="{Binding ActiveAnswers[2].Color, Converter={StaticResource AnswerImage}}" />
+                        <Image Grid.Row="1" Grid.Column="1" 
+                               Source="{Binding ActiveAnswers[3].Color, Converter={StaticResource AnswerImage}}" />
+
                     </Grid>
-
                 </StackPanel>
-
             </Border>
-
         </Grid>
 
         <Grid Visibility="{Binding ResultScreen, Converter={StaticResource NullToHidden}}">
             <Border>
                 <StackPanel>
-                    <TextBlock Margin="0 100 0 0"
+                    <TextBlock Margin="0 130 0 0"
                                FontSize="30"
-                               HorizontalAlignment="Center"
-                               TextWrapping="Wrap" 
                                Text="{Binding ActivePack.Name}" />
 
-                    <TextBlock HorizontalAlignment="Center"
-                               Margin="0 10">
+                    <TextBlock Margin="0 10">
                         <Run Text="You got"/>
-                        <Run Text="{Binding CorrectGuesses}" FontWeight="Bold"/>
+                        <Run Text="{Binding CorrectGuesses}" Style="{StaticResource ChangeableNumbers}"/>
                         <Run Text="of" />
-                        <Run Text="{Binding AmountOfQuestions}" FontWeight="Bold"/>
+                        <Run Text="{Binding AmountOfQuestions}" Style="{StaticResource ChangeableNumbers}"/>
                         <Run Text="answers correct!" />
                     </TextBlock>
 
                     <Button Content="{fa:Icon Repeat}"
                             FontSize="24"
-                            Margin="50"
+                            Margin="10"
                             Width="100"
                             Height="75"
-                            Command="{Binding RepeatQuizCommand}"/>
+                            Command="{Binding StartQuizCommand}"/>
 
                 </StackPanel>
             </Border>

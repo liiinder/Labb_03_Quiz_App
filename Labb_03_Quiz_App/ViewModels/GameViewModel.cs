@@ -8,21 +8,39 @@ namespace Labb_03_Quiz_App.ViewModels
     {
         private readonly MainWindowViewModel? mainWindowViewModel;
         private DispatcherTimer timer;
+        private int _amountOfQuestions;
+        private int _questionIndex;
+        private int _correctGuesses;
         private bool _hasGuessed;
         private int? _timeLeft;
-        private int _whichQuestion;
-        private int _amountOfQuestions;
-        private int _correctGuesses;
         private bool? _resultScreen;
         private int TimeBetweenQuestions = 2;
 
         public bool? IsActive { get => mainWindowViewModel?.InGameMode; }
         public QuestionPackViewModel? ActivePack { get => mainWindowViewModel?.ActivePack; }
 
-        public Stack<Question>? ShuffledUnansweredQuestions { get; set; }
+        public Stack<Question>? UnansweredQuestions { get; set; }
         public Question ActiveQuestion { get; set; }
         public List<Answer> ActiveAnswers { get; set; }
 
+        public int AmountOfQuestions
+        {
+            get => _amountOfQuestions;
+            set
+            {
+                _amountOfQuestions = value;
+                RaisePropertyChanged();
+            }
+        }
+        public int QuestionIndex
+        {
+            get => _questionIndex;
+            set
+            {
+                _questionIndex = value;
+                RaisePropertyChanged();
+            }
+        }
         public int CorrectGuesses
         {
             get => _correctGuesses;
@@ -41,15 +59,6 @@ namespace Labb_03_Quiz_App.ViewModels
                 RaisePropertyChanged();
             }
         }
-        public bool? ResultScreen
-        {
-            get => _resultScreen;
-            set
-            {
-                _resultScreen = value;
-                RaisePropertyChanged();
-            }
-        }
         public int? TimeLeft
         {
             get => _timeLeft;
@@ -59,87 +68,68 @@ namespace Labb_03_Quiz_App.ViewModels
                 RaisePropertyChanged();
             }
         }
-        public int WhichQuestion
+        public bool? ResultScreen
         {
-            get => _whichQuestion;
+            get => _resultScreen;
             set
             {
-                _whichQuestion = value;
-                RaisePropertyChanged();
-            }
-        }
-        public int AmountOfQuestions
-        {
-            get => _amountOfQuestions;
-            set
-            {
-                _amountOfQuestions = value;
+                _resultScreen = value;
                 RaisePropertyChanged();
             }
         }
 
         public DelegateCommand GuessAnswerCommand { get; }
-        public DelegateCommand RepeatQuizCommand { get; }
+        public DelegateCommand StartQuizCommand { get; }
 
         public GameViewModel(MainWindowViewModel? mainWindowViewModel)
         {
             GuessAnswerCommand = new DelegateCommand(GuessAnswer);
-            RepeatQuizCommand = new DelegateCommand(RepeatQuiz);
+            StartQuizCommand = new DelegateCommand(StartQuiz);
 
             this.mainWindowViewModel = mainWindowViewModel;
 
-            ActiveAnswers = new List<Answer> { new Answer("Answer A"),
-                                               new Answer("Answer B"),
-                                               new Answer("Answer C"),
-                                               new Answer("Answer D")};
             ActiveQuestion = new Question();
+            ActiveAnswers = new List<Answer>(4);
+            for (int i = 0; i < 4; i++) ActiveAnswers.Add(new Answer(""));
 
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += Timer_Tick;
             timer.Start();
         }
-        private void RepeatQuiz(object obj)
-        {
-            StartQuiz();
-        }
-
-        private void GuessAnswer(object obj)
+        private void GuessAnswer(object guess)
         {
             if (!HasGuessed)
             {
-                foreach (Answer ans in ActiveAnswers)
-                {
-                    if (ans.Text == ActiveQuestion.CorrectAnswer) ans.Color = "Green";
-                }
+                ActiveAnswers.First(a => a.Text == ActiveQuestion.CorrectAnswer).Color = "Green";
 
-                if (obj is Answer a)
+                if (guess is Answer a)
                 {
-                    if (a.Text == ActiveQuestion.CorrectAnswer) CorrectGuesses++;
+                    if (a.Color == "Green") CorrectGuesses++;
                     else a.Color = "Red";
                 }
-                TimeLeft = TimeBetweenQuestions; // The time the right answer is displayed
-                timer.Start();
+
                 RaisePropertyChanged("ActiveAnswers");
+
+                TimeLeft = TimeBetweenQuestions;
+                timer.Start();
             }
             HasGuessed = true;
         }
-
         private void Timer_Tick(object? sender, EventArgs e)
         {
             TimeLeft--;
             if (TimeLeft == 0 && !HasGuessed) GuessAnswer(e);
             else if (TimeLeft == 0 && HasGuessed) NextQuestion();
         }
-
         private void NextQuestion()
         {
-            WhichQuestion++;
-            if (ShuffledUnansweredQuestions?.Count > 0)
+            QuestionIndex++;
+            if (UnansweredQuestions?.Count > 0)
             {
                 HasGuessed = false;
 
-                ActiveQuestion = ShuffledUnansweredQuestions.Pop();
+                ActiveQuestion = UnansweredQuestions.Pop();
                 RaisePropertyChanged("ActiveQuestion");
 
                 ActiveAnswers = ShuffledAnswers(ActiveQuestion);
@@ -149,32 +139,27 @@ namespace Labb_03_Quiz_App.ViewModels
             }
             else
             {
-                ShuffledUnansweredQuestions = null;
+                UnansweredQuestions = null;
                 ResultScreen = true;
             }
-            RaisePropertyChanged("ShuffledUnansweredQuestions");
+            RaisePropertyChanged("UnansweredQuestions");
         }
-
-        public void StartQuiz()
+        public void StartQuiz(object obj)
         {
             ResultScreen = null;
             AmountOfQuestions = ActivePack.Questions.Count();
             CorrectGuesses = 0;
-            WhichQuestion = 0;
+            QuestionIndex = 0;
 
             var tempListOfQuestions = new List<Question>();
-            foreach (Question q in ActivePack.Questions)
-            {
-                tempListOfQuestions.Add(q);
-            }
-            ShuffleList(tempListOfQuestions);
-            ShuffledUnansweredQuestions = new Stack<Question>(tempListOfQuestions);
-            RaisePropertyChanged("ShuffledQuestions");
+            foreach (Question q in ActivePack.Questions) tempListOfQuestions.Add(q);
+
+            UnansweredQuestions = new Stack<Question>(ShuffleList(tempListOfQuestions));
+            RaisePropertyChanged("UnansweredQuestions");
 
             NextQuestion();
         }
-
-        private void ShuffleList<T>(List<T> list)
+        private List<T> ShuffleList<T>(List<T> list)
         {
             for (int i = 0; i < list.Count(); i++)
             {
@@ -183,14 +168,15 @@ namespace Labb_03_Quiz_App.ViewModels
                 list[i] = list[random];
                 list[random] = temp;
             }
+            return list;
         }
         private List<Answer> ShuffledAnswers(Question q)
         {
             var answers = new List<Answer>();
             answers.Add(new Answer(q.CorrectAnswer));
-            foreach (string s in q.IncorrectAnswers) answers.Add(new Answer(s));
-            ShuffleList(answers);
-            return answers;
+            foreach (string text in q.IncorrectAnswers) answers.Add(new Answer(text));
+
+            return ShuffleList(answers);
         }
     }
 }

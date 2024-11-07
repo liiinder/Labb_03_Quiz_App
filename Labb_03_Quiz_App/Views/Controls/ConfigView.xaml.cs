@@ -1,6 +1,4 @@
-﻿using Labb_03_Quiz_App.ViewModels;
-using System.Collections;
-using System.ComponentModel;
+﻿using System.Collections;
 using System.Windows.Controls;
 
 namespace Labb_03_Quiz_App.View.Controls
@@ -10,7 +8,6 @@ namespace Labb_03_Quiz_App.View.Controls
     /// </summary>
     public partial class ConfigView : UserControl
     {
-        internal ConfigViewModel ConfigVM { get; set; }
         public ConfigView()
         {
             InitializeComponent();
@@ -34,21 +31,6 @@ namespace Labb_03_Quiz_App.View.Controls
                     }
                 }
             }
-        }
-
-        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(ConfigVM.SelectedQuestion))
-            {
-                QueryTextBox.SelectionStart = QueryTextBox.Text.Length;
-                QueryTextBox.Focus();
-            }
-        }
-
-        private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
-        {
-            ConfigVM = (ConfigViewModel)this.DataContext;
-            ConfigVM.PropertyChanged += ViewModel_PropertyChanged;
         }
     }
 }

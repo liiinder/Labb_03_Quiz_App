@@ -8,23 +8,6 @@ namespace Labb_03_Quiz_App.ViewModels
     internal class QuestionPackViewModel : ViewModelBase
     {
         private readonly QuestionPack model;
-        public ObservableCollection<Question> Questions { get; }
-
-        public QuestionPackViewModel(QuestionPack model)
-        {
-            this.model = model;
-            Questions = new ObservableCollection<Question>(model.Questions);
-        }
-
-        [JsonConstructor]
-        public QuestionPackViewModel(string name, Difficulty difficulty, int timeLimitInSeconds, ObservableCollection<Question> questions)
-        {
-            model = new QuestionPack();
-            Questions = questions;
-            model.Name = name;
-            model.Difficulty = difficulty;
-            model.TimeLimitInSeconds = timeLimitInSeconds;
-        }
 
         public string Name
         {
@@ -52,6 +35,23 @@ namespace Labb_03_Quiz_App.ViewModels
                 model.TimeLimitInSeconds = value;
                 RaisePropertyChanged();
             }
+        }
+        public ObservableCollection<Question> Questions { get; }
+
+        public QuestionPackViewModel(QuestionPack model)
+        {
+            this.model = model;
+            Questions = new ObservableCollection<Question>(model.Questions);
+        }
+
+        [JsonConstructor]
+        public QuestionPackViewModel(string name, Difficulty difficulty, int timeLimitInSeconds, ObservableCollection<Question> questions)
+        {
+            model = new QuestionPack();
+            Questions = questions;
+            model.Name = name;
+            model.Difficulty = difficulty;
+            model.TimeLimitInSeconds = timeLimitInSeconds;
         }
     }
 }

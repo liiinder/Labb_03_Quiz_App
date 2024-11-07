@@ -7,18 +7,19 @@
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              xmlns:converters="clr-namespace:Labb_03_Quiz_App.Converters"
              mc:Ignorable="d">
-    <UserControl.Resources>
-        
-        <converters:SelectPackNameConverter x:Key="SelectPackName" />
-        
-    </UserControl.Resources>
     
+    <UserControl.Resources>
+
+        <converters:SelectPackNameConverter x:Key="SelectPackName" />
+
+    </UserControl.Resources>
+
     <Grid>
         <Menu DockPanel.Dock="Top" 
               BorderThickness="0 1 0 1" 
               BorderBrush="#ddd" 
               Background="#f3f3f3">
-            
+
             <MenuItem Header="_File">
                 <MenuItem Header="_New Question Pack" 
                           Icon="{fa:Icon FolderPlus}" 
@@ -51,12 +52,16 @@
                           Icon="{fa:Icon FolderMinus}"
                           Command="{Binding DeletePackCommand}"
                           IsEnabled="{Binding InConfigMode}" />
+                
                 <Separator/>
+                
                 <MenuItem Header="_Import Questions" InputGestureText="Ctrl+I" 
                           Icon="{fa:Icon CloudArrowDown}" 
                           IsEnabled="{Binding InConfigMode}" 
                           Command="{Binding ImportQuestionsCommand}"/>
+                
                 <Separator/>
+                
                 <MenuItem Header="_Exit" InputGestureText="Alt+F4"
                           Icon="{fa:Icon DoorOpen}" 
                           Command="{Binding ExitWindowCommand}"/>
@@ -65,22 +70,22 @@
             <MenuItem Header="_Edit"
                       DataContext="{Binding ConfigViewModel}"
                       IsEnabled="{Binding IsActive}">
-                
+
                 <MenuItem Header="_Add Question" 
                           Command="{Binding AddQuestionCommand}"
                           InputGestureText="Insert"
                           Icon="{fa:Icon Plus}" />
-                
+
                 <MenuItem Header="_Remove Question" 
                           Command="{Binding DeleteQuestionCommand}"
                           InputGestureText="Delete" 
                           Icon="{fa:Icon Minus}" />
-                
+
                 <MenuItem Header="Pack _Options"
                           Command="{Binding PackOptionsCommand}"
                           InputGestureText="Ctrl+O" 
                           Icon="{fa:Icon Sliders}" />
-                
+
             </MenuItem>
 
             <MenuItem Header="_View">
@@ -95,8 +100,9 @@
                           Command="{Binding SwitchModeCommand}"
                           CommandParameter="ConfigMode" 
                           IsEnabled="{Binding InGameMode}"/>
-             
+
                 <Separator/>
+                
                 <MenuItem Header="_Fullscreen" InputGestureText="Alt+Enter"
                           Icon="{fa:Icon Expand}"
                           Command="{Binding FullScreenCommand}" />
@@ -104,19 +110,3 @@
         </Menu>
     </Grid>
 </UserControl>
-
-<!--
-    TODO: 
-        
-    Add Command to all imput gestures.
-    https://stackoverflow.com/questions/4682915/defining-menuitem-shortcuts
-    
-    Add FontAwesome Icons to menu
-    
-    https://stackoverflow.com/questions/5900229/handling-input-gestures-in-a-user-control-mvvm
-    
-    Alt+Enter -> Fullscreen
-        WindowStyle="None"   
-        WindowState="Maximized"
-
-    -->

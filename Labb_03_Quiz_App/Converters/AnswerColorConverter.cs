@@ -17,8 +17,6 @@ namespace Labb_03_Quiz_App.Converters
             }
 
             return brush;
-
-            //TODO: add some gradient to the border colors.
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

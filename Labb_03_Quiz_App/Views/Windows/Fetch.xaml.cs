@@ -14,6 +14,9 @@ namespace Labb_03_Quiz_App.View.Windows
     }
 }
 
+//TODO: Currently not in use... Implement this.
+
+
 // https://opentdb.com/api_config.php
 
 // https://opentdb.com/api.php?amount=10&category=31&difficulty=easy&type=multiple

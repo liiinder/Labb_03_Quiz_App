@@ -19,23 +19,25 @@
         <KeyBinding Key="Esc" Command="ApplicationCommands.Close" />
     </Window.InputBindings>
 
+    <Window.Resources>
+        <Style TargetType="Label">
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Padding" Value="2 5 2 1" />
+        </Style>
+    </Window.Resources>
+
     <Grid>
         <Border Padding="10 5 10 0">
             <StackPanel DataContext="{Binding ConfigViewModel}" >
 
-                <Label FontWeight="Bold" 
-                       Content="Pack Name:"
-                       Padding="2 5 0 1" />
+                <Label Content="Pack Name:" />
                 <TextBox x:Name="SetPackName"
-                         Text="{Binding ActivePack.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         ToolTip="Set pack name"
-                         />
+                         ToolTip="Set name of pack"
+                         Text="{Binding ActivePack.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                <Label FontWeight="Bold" 
-                       Content="Difficulty"
-                       Padding="2 5 0 1" />
-                <ComboBox x:Name="difficulty"
-                          ToolTip="Set difficulty"
+                <Label Content="Difficulty" />
+                <ComboBox ToolTip="Set difficulty of pack"
                           SelectedValue="{Binding ActivePack.Difficulty}"
                           ItemsSource="{Binding Difficulties}">
                 </ComboBox>
@@ -46,28 +48,24 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <Label FontWeight="Bold"
-                           Content="Time Limit:"
-                           Padding="2 5 0 0" 
-                           HorizontalAlignment="Left"/>
+                    <Label Content="Time Limit:" />
 
                     <Label Grid.Column="1"
-                           Padding="0 5 2 0"
-                           Content="{Binding ElementName=timeSlider, Path=Value}"
-                           ContentStringFormat="{}{0} seconds"
-                           HorizontalAlignment="Right" />
+                           FontWeight="Normal"
+                           HorizontalAlignment="Right" 
+                           Content="{Binding ActivePack.TimeLimitInSeconds}"
+                           ContentStringFormat="{}{0} seconds" />
                 </Grid>
 
-                <Slider x:Name="timeSlider"
-                        TickFrequency="5"
+                <Slider TickFrequency="5"
                         TickPlacement="BottomRight"
                         IsSnapToTickEnabled="True"
                         Minimum="5"
                         Maximum="120"
                         Value="{Binding ActivePack.TimeLimitInSeconds}"
                         Foreground="DarkGray" />
+                
             </StackPanel>
         </Border>
-
     </Grid>
 </Window>

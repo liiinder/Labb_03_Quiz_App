@@ -8,11 +8,11 @@ namespace Labb_03_Quiz_App.ViewModels
     internal class ConfigViewModel : ViewModelBase
     {
         private readonly MainWindowViewModel? mainWindowViewModel;
+        private Question? _selectedQuestion;
+
         public QuestionPackViewModel? ActivePack { get => mainWindowViewModel?.ActivePack; }
         public bool? IsActive { get => mainWindowViewModel?.InConfigMode; }
         public List<Difficulty> Difficulties { get; set; }
-
-        private Question? _selectedQuestion;
         public Question? SelectedQuestion
         {
             get => _selectedQuestion;
@@ -56,10 +56,7 @@ namespace Labb_03_Quiz_App.ViewModels
                 {
                     SelectedQuestion = ActivePack?.Questions[^1];
                 }
-                else
-                {
-                    SelectedQuestion = ActivePack?.Questions[SelectedIndex];
-                }
+                else SelectedQuestion = ActivePack?.Questions[SelectedIndex];
             }
         }
 
