@@ -71,7 +71,7 @@ Det ska finnas ett menyalternativ för att köra programmet i helskärmsläge.
 
 
 
-### Importera frågor via API ( VG-uppgift )
+Importera frågor via API ( VG-uppgift )
 
 Open Trivia Database tillhandahåller quiz-frågor via ett öppet API på https://opentdb.com
 

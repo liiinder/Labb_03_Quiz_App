@@ -21,9 +21,6 @@ namespace Labb_03_Quiz_App.Models
             IncorrectAnswers = [string.Empty, string.Empty, string.Empty];
         }
 
-        public override string ToString()
-        {
-            return Query;
-        }
+        public override string ToString() => Query;
     }
 }

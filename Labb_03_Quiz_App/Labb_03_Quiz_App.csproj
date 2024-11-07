@@ -18,4 +18,13 @@
     <PackageReference Include="FontAwesome.Sharp" Version="6.6.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Assets\correct.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\incorrect.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

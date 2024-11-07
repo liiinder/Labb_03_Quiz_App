@@ -14,7 +14,7 @@ namespace Labb_03_Quiz_App.ViewModels
         private int _amountOfQuestions;
         private int _correctGuesses;
         private bool? _resultScreen;
-        private int TimeBetweenQuestions = 1;
+        private int TimeBetweenQuestions = 2;
 
         public bool? IsActive { get => mainWindowViewModel?.InGameMode; }
         public QuestionPackViewModel? ActivePack { get => mainWindowViewModel?.ActivePack; }
@@ -91,7 +91,7 @@ namespace Labb_03_Quiz_App.ViewModels
             ActiveAnswers = new List<Answer> { new Answer("Answer A"),
                                                new Answer("Answer B"),
                                                new Answer("Answer C"),
-                                               new Answer("Answer D") };
+                                               new Answer("Answer D")};
             ActiveQuestion = new Question();
 
             timer = new DispatcherTimer();
@@ -119,6 +119,7 @@ namespace Labb_03_Quiz_App.ViewModels
                     else a.Color = "Red";
                 }
                 TimeLeft = TimeBetweenQuestions; // The time the right answer is displayed
+                timer.Start();
                 RaisePropertyChanged("ActiveAnswers");
             }
             HasGuessed = true;
@@ -156,7 +157,6 @@ namespace Labb_03_Quiz_App.ViewModels
 
         public void StartQuiz()
         {
-            // Reset
             ResultScreen = null;
             AmountOfQuestions = ActivePack.Questions.Count();
             CorrectGuesses = 0;

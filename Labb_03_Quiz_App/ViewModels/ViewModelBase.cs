@@ -11,5 +11,4 @@ namespace Labb_03_Quiz_App.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(PropertyName));
         }
     }
-
 }

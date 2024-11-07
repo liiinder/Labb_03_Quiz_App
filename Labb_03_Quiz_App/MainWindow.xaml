@@ -6,9 +6,13 @@
         xmlns:local="clr-namespace:Labb_03_Quiz_App"
         xmlns:controls="clr-namespace:Labb_03_Quiz_App.View.Controls"
         xmlns:converters="clr-namespace:Labb_03_Quiz_App.Converters"
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         mc:Ignorable="d"
         Closing="Window_Closing"
-        Title="MainWindow" Height="500" Width="800">
+        Loaded="Window_Loaded"
+        WindowStartupLocation="CenterScreen"
+        Icon="{fa:IconSource Brain, Foreground=LightPink}"
+        Title="Quiz App" Height="500" Width="800">
     
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
@@ -19,6 +23,7 @@
         <KeyBinding Key="O" Modifiers="Ctrl" Command="{Binding ConfigViewModel.PackOptionsCommand}" />
         <KeyBinding Key="P" Modifiers="Ctrl" Command="{Binding SwitchModeCommand}" CommandParameter="GameMode" />
         <KeyBinding Key="E" Modifiers="Ctrl" Command="{Binding SwitchModeCommand}" CommandParameter="ConfigMode" />
+        <KeyBinding Key="Enter" Modifiers="Alt" Command="{Binding FullScreenCommand}" />
     </Window.InputBindings>
     <Grid>
         

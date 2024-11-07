@@ -8,8 +8,11 @@
              xmlns:converters="clr-namespace:Labb_03_Quiz_App.Converters"
              mc:Ignorable="d">
     <UserControl.Resources>
+        
         <converters:SelectPackNameConverter x:Key="SelectPackName" />
+        
     </UserControl.Resources>
+    
     <Grid>
         <Menu DockPanel.Dock="Top" 
               BorderThickness="0 1 0 1" 
@@ -40,7 +43,6 @@
                             <Setter Property="Command" 
                                     Value="{Binding DataContext.SelectPackCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
                             <Setter Property="CommandParameter" Value="{Binding}" />
-                            <!-- TODO: Fatta varför DataContext behövs och vad RelativeSource betyder/menas med.. -->
                         </Style>
                     </MenuItem.ItemContainerStyle>
                 </MenuItem>
@@ -96,7 +98,8 @@
              
                 <Separator/>
                 <MenuItem Header="_Fullscreen" InputGestureText="Alt+Enter"
-                          Icon="{fa:Icon Expand}"/>
+                          Icon="{fa:Icon Expand}"
+                          Command="{Binding FullScreenCommand}" />
             </MenuItem>
         </Menu>
     </Grid>

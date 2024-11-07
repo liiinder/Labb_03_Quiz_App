@@ -1,12 +1,10 @@
 ﻿using Labb_03_Quiz_App.View.Windows;
 using Labb_03_Quiz_App.ViewModels;
 using System.Windows;
+using static System.Windows.Forms.AxHost;
 
 namespace Labb_03_Quiz_App
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private MainWindowViewModel mainWindowVM { get; }
@@ -17,25 +15,14 @@ namespace Labb_03_Quiz_App
             DataContext = mainWindowVM;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e) => new Fetch().ShowDialog();
-        private void Pack_Options(object sender, RoutedEventArgs e) => new PackOptions().ShowDialog();
-
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             mainWindowVM.ExitWindowCommand.Execute(null);
         }
+
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            await mainWindowVM.LoadPacks();
+        }
     }
 }
-
-// 1. Skapa en json fil i en mapp under användarens AppData\Local
-// som lagrar samtliga “question packs” och laddar in dem automatiskt när
-// programmet startar. Detta är alternativet jag gjort i min app.
-// För att hitta mappen kan du använda:
-//
-// Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-//
-// Tänk på att programmet ska fungera även om mappen och/eller filen inte finns;
-// den måste i så fall skapa upp mapp / fil.
-
-// 2. Använd OpenFileDialog() / SaveFileDialog()
-// och låt användaren spara/ladda varje “question pack” i en separat fil.

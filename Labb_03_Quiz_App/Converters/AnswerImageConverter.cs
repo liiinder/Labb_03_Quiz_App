@@ -1,22 +1,23 @@
 ﻿using System.Globalization;
+using System.IO;
 using System.Windows.Data;
-using System.Windows.Media;
 
 namespace Labb_03_Quiz_App.Converters
 {
-    internal class AnswerColorConverter : IValueConverter
+    internal class AnswerImageConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            SolidColorBrush brush = new SolidColorBrush();
-            brush.Color = Color.FromArgb(0, 0, 0, 0);
+            var currDir = Directory.GetCurrentDirectory();
+            var file = Path.Combine(currDir, "assets");
             if (value is string color)
             {
-                if (color == "Red") brush.Color = Colors.Red;
-                else if (color == "Green") brush.Color = Colors.LimeGreen;
+                if (color == "Red") file = Path.Combine(file, "incorrect.png");
+                else if (color == "Green") file = Path.Combine(file, "correct.png");
+                else file = null;
             }
 
-            return brush;
+            return file;
 
             //TODO: add some gradient to the border colors.
         }

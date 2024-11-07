@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:converters="clr-namespace:Labb_03_Quiz_App.Converters"
         mc:Ignorable="d"
-        WindowStyle="SingleBorderWindow"
+        WindowStyle="ToolWindow"
+        WindowStartupLocation="CenterScreen"
         Title="Pack Options" Height="190" Width="200"
         FocusManager.FocusedElement="{Binding ElementName=SetPackName}">
 

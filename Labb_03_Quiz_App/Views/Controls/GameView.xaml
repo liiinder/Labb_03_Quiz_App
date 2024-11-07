@@ -14,31 +14,32 @@
     <UserControl.Resources>
 
         <Style BasedOn="{StaticResource ButtonStyle}" TargetType="{x:Type Button}" />
-        <!--<Setter Property="Cursor" Value="Hand" />
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#55ADD8E6" />
-            </Trigger>
-        </Style.Triggers>-->
-
 
         <Thickness x:Key="ButtonMargin">5</Thickness>
         <Thickness x:Key="ButtonPadding">0 25</Thickness>
 
-        <converters:AnswerColorConverter x:Key="QuestionColorsConverter" />
+        <converters:AnswerColorConverter x:Key="AnswerColor" />
+        <converters:AnswerImageConverter x:Key="AnswerImage" />
         <converters:NullToHiddenConverter x:Key="NullToHidden" />
+
+        <Style TargetType="Image">
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+        </Style>
 
     </UserControl.Resources>
     <Grid Background="#FFF7E5FF">
-        
+
         <Grid x:Name="Game"
               Visibility="{Binding ShuffledUnansweredQuestions, Converter={StaticResource NullToHidden}}">
-            
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            
+
             <Label x:Name="Timer"
                    Content="{Binding TimeLeft}"
                    FontWeight="Bold"
@@ -76,7 +77,7 @@
                         <Border Grid.Row="0" Grid.Column="0"
                                 Margin="2"
                                 CornerRadius="5"
-                                Background="{Binding ActiveAnswers[0].Color, Converter={StaticResource QuestionColorsConverter}}">
+                                Background="{Binding ActiveAnswers[0].Color, Converter={StaticResource AnswerColor}}">
                             <Button Command="{Binding GuessAnswerCommand}" 
                                     CommandParameter="{Binding ActiveAnswers[0]}"
                                     Margin="{StaticResource ButtonMargin}"
@@ -91,7 +92,7 @@
                         <Border Grid.Row="0" Grid.Column="1"
                                 Margin="2"
                                 CornerRadius="5"
-                                Background="{Binding ActiveAnswers[1].Color, Converter={StaticResource QuestionColorsConverter}}">
+                                Background="{Binding ActiveAnswers[1].Color, Converter={StaticResource AnswerColor}}">
                             <Button Command="{Binding GuessAnswerCommand}"
                                     CommandParameter="{Binding ActiveAnswers[1]}"
                                     Margin="{StaticResource ButtonMargin}"
@@ -106,7 +107,7 @@
                         <Border Grid.Row="1" Grid.Column="0"
                                 Margin="2"
                                 CornerRadius="5"
-                                Background="{Binding ActiveAnswers[2].Color, Converter={StaticResource QuestionColorsConverter}}">
+                                Background="{Binding ActiveAnswers[2].Color, Converter={StaticResource AnswerColor}}">
                             <Button Command="{Binding GuessAnswerCommand}"
                                     CommandParameter="{Binding ActiveAnswers[2]}"
                                     Margin="{StaticResource ButtonMargin}"
@@ -121,7 +122,7 @@
                         <Border Grid.Row="1" Grid.Column="1"
                                 CornerRadius="5"
                                 Margin="2"
-                                Background="{Binding ActiveAnswers[3].Color, Converter={StaticResource QuestionColorsConverter}}">
+                                Background="{Binding ActiveAnswers[3].Color, Converter={StaticResource AnswerColor}}">
                             <Button Command="{Binding GuessAnswerCommand}"
                                     CommandParameter="{Binding ActiveAnswers[3]}"
                                     Margin="{StaticResource ButtonMargin}"
@@ -132,15 +133,23 @@
                                        Text="{Binding ActiveAnswers[3].Text}"/>
                             </Button>
                         </Border>
-                        
+
+                        <Image Source="{Binding ActiveAnswers[0].Color, Converter={StaticResource AnswerImage}}" 
+                               Grid.Row="0" Grid.Column="0" />
+                        <Image Source="{Binding ActiveAnswers[1].Color, Converter={StaticResource AnswerImage}}"
+                               Grid.Row="0" Grid.Column="1" />
+                        <Image Source="{Binding ActiveAnswers[2].Color, Converter={StaticResource AnswerImage}}"
+                               Grid.Row="1" Grid.Column="0" />
+                        <Image Source="{Binding ActiveAnswers[3].Color, Converter={StaticResource AnswerImage}}"
+                                Grid.Row="1" Grid.Column="1" />
                     </Grid>
-                    
+
                 </StackPanel>
-                
+
             </Border>
-            
+
         </Grid>
-        
+
         <Grid Visibility="{Binding ResultScreen, Converter={StaticResource NullToHidden}}">
             <Border>
                 <StackPanel>
@@ -170,33 +179,5 @@
             </Border>
         </Grid>
     </Grid>
-    
-</UserControl>
-<!-- 
-    
-    This rectangle is painted with a diagonal linear gradient.
-    
-<Rectangle Width="200" Height="100">
-    <Rectangle.Fill>
-        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-            <GradientStop Color="Yellow" Offset="0.0" />
-            <GradientStop Color="Red" Offset="0.25" />
-            <GradientStop Color="Blue" Offset="0.75" />
-            <GradientStop Color="LimeGreen" Offset="1.0" />
-        </LinearGradientBrush>
-    </Rectangle.Fill>
-</Rectangle>
 
-type: "multiple",
-difficulty: "medium",
-category: "Entertainment: Music",
-question: "Which of these songs is NOT in The Beatles&#039; album &quot;Sgt. Pepper&#039;s Lonely Hearts Club Band&quot;?",
-correct_answer: "Strawberry Fields Forever",
-incorrect_answers: [
-"Getting Better",
-"Fixing a Hole",
-"Lucy in the Sky with Diamonds"
-]
-]
-    
-    -->
+</UserControl>

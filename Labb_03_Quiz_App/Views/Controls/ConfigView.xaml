@@ -7,7 +7,8 @@
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              xmlns:converters="clr-namespace:Labb_03_Quiz_App.Converters" 
              DataContext="{Binding ConfigViewModel}"
-             mc:Ignorable="d" 
+             Loaded="UserControl_Loaded"
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
 
@@ -42,10 +43,11 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
                 
                 <Label FontWeight="Bold"
+                       FontSize="16"
                        Content="{Binding ActivePack.Name}"
                        VerticalAlignment="Bottom"/>
                 
@@ -69,16 +71,15 @@
             </Grid>
         </Border>
                
-        <ListBox x:Name="questions"
-                Grid.Row="1"
-                HorizontalAlignment="Stretch"
-                SelectionMode="Multiple"
-                SelectionChanged="questions_SelectionChanged"
-                ItemsSource="{Binding ActivePack.Questions}"
-                SelectedItem="{Binding SelectedQuestion, Mode=TwoWay}"
-                Margin="10 0 0 10"
-                Visibility="{Binding ActivePack, Converter={StaticResource NullToHidden}}">
-            
+        <ListBox Grid.Row="1"
+                 HorizontalAlignment="Stretch"
+                 SelectionMode="Multiple"
+                 SelectionChanged="questions_SelectionChanged"
+                 ItemsSource="{Binding ActivePack.Questions}"
+                 SelectedItem="{Binding SelectedQuestion, Mode=TwoWay}"
+                 Margin="10 0 0 10"
+                 Visibility="{Binding ActivePack, Converter={StaticResource NullToHidden}}">
+
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
@@ -88,7 +89,7 @@
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
-            
+
         </ListBox>
             
 
@@ -99,6 +100,7 @@
                 Visibility="{Binding SelectedQuestion, Converter={StaticResource NullToHidden}}">
             
             <Label FontWeight="Bold"
+                   FontSize="16"
                    Content="Question:"
                    VerticalAlignment="Bottom" />
         </Border>
@@ -108,24 +110,33 @@
                 Padding="10 0 10 0"
                 Visibility="{Binding SelectedQuestion, Converter={StaticResource NullToHidden}}">
             <StackPanel>
-                <TextBox Height="100" 
+                <TextBox x:Name="QueryTextBox"
+                         Height="100"
+                         TextWrapping="WrapWithOverflow"
                          Text="{Binding SelectedQuestion.Query, UpdateSourceTrigger=PropertyChanged}" />
 
                 <Label FontWeight="Bold"
-                    Content="Correct Answer:"/>
+                       FontSize="16"
+                       Content="Correct Answer:"/>
                 <TextBox Text="{Binding SelectedQuestion.CorrectAnswer, UpdateSourceTrigger=PropertyChanged}" />
                 
                 <Label FontWeight="Bold"
-                    Content="Incorrect Answers:"/>
+                       FontSize="16"
+                       Content="Incorrect Answers:"/>
                 <TextBox Text="{Binding SelectedQuestion.IncorrectAnswers[0], UpdateSourceTrigger=PropertyChanged}" />
                 <TextBox Text="{Binding SelectedQuestion.IncorrectAnswers[1], UpdateSourceTrigger=PropertyChanged}" 
                          Margin="0 5 0 0"/>
                 <TextBox Text="{Binding SelectedQuestion.IncorrectAnswers[2], UpdateSourceTrigger=PropertyChanged}"
-                         Margin="0 5 0 0"/>
-                
+                         Margin="0 5 0 0">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Enter"
+                                    Command="{Binding SwapQuestionCommand}" />
+                    </TextBox.InputBindings>
+                </TextBox>
+
             </StackPanel>
         </Border>
-
+        
     </Grid>
     
 </UserControl>
