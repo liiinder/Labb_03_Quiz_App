@@ -13,5 +13,3 @@ namespace Labb_03_Quiz_App.View.Controls
         }
     }
 }
-
-//TODO: XAML ... Fatta varför DataContext behövs och vad RelativeSource betyder/menas med.. -->

@@ -17,5 +17,3 @@ namespace Labb_03_Quiz_App.View.Windows
         private void CloseCommandHandler(object sender, ExecutedRoutedEventArgs e) => Close();
     }
 }
-
-//TODO: Make it so when you open PackOptions it will select the end of the text

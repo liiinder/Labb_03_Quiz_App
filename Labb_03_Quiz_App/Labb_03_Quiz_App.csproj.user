@@ -19,7 +19,7 @@
     <Compile Update="Views\Windows\PackOptions.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Windows\Fetch.xaml.cs">
+    <Compile Update="Views\Windows\FetchQuestions.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -36,7 +36,7 @@
     <Page Update="Views\Windows\PackOptions.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Windows\Fetch.xaml">
+    <Page Update="Views\Windows\FetchQuestions.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">

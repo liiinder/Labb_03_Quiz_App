@@ -35,5 +35,6 @@ namespace Labb_03_Quiz_App.View.Controls
     }
 }
 
-//TODO: Make selection of listbox able to select more than one with ctrl...
-// have the right form controll the last selected and delete will remove all.
+//TODO: Maybe change the listbox selection from this click to deselect to a regular multi.
+// And then make it able to select more than one with ctrl and remove all with the button / delete
+// Try out what feels best between have the first or the last selection as the SelectedQuestion on the right for edit.

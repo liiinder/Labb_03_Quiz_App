@@ -11,7 +11,7 @@ namespace Labb_03_Quiz_App.ViewModels
         private Question? _selectedQuestion;
 
         public QuestionPackViewModel? ActivePack { get => mainWindowViewModel?.ActivePack; }
-        public bool? IsActive { get => mainWindowViewModel?.InConfigMode; }
+        public bool IsActive { get => (mainWindowViewModel is null ? false : mainWindowViewModel.InConfigMode); }
         public List<Difficulty> Difficulties { get; set; }
         public Question? SelectedQuestion
         {
@@ -32,19 +32,19 @@ namespace Labb_03_Quiz_App.ViewModels
         {
             this.mainWindowViewModel = mainWindowViewModel;
 
-            AddQuestionCommand = new DelegateCommand(AddQuestion);
-            DeleteQuestionCommand = new DelegateCommand(DeleteQuestion);
-            PackOptionsCommand = new DelegateCommand(PackOptions);
+            AddQuestionCommand = new DelegateCommand(AddQuestion, CanModifyPacks);
+            DeleteQuestionCommand = new DelegateCommand(DeleteQuestion, CanModifyPacks);
+            PackOptionsCommand = new DelegateCommand(PackOptions, CanModifyPacks);
             SwapQuestionCommand = new DelegateCommand(SwapQuestion);
             Difficulties = Enum.GetValues(typeof(Difficulty)).Cast<Difficulty>().ToList();
         }
 
+        internal bool CanModifyPacks(object? arg) => IsActive;
         private void AddQuestion(object obj)
         {
             ActivePack?.Questions.Add(new Question());
             SelectedQuestion = ActivePack?.Questions[^1];
         }
-
         private void DeleteQuestion(object obj)
         {
             int SelectedIndex = ActivePack.Questions.IndexOf(SelectedQuestion);
@@ -59,18 +59,16 @@ namespace Labb_03_Quiz_App.ViewModels
                 else SelectedQuestion = ActivePack?.Questions[SelectedIndex];
             }
         }
-
         private void SwapQuestion(object obj)
         {
             int SelectedIndex = ActivePack.Questions.IndexOf(SelectedQuestion);
 
             if (SelectedQuestion == ActivePack?.Questions[^1])
             {
-                AddQuestion(null);
+                AddQuestionCommand.Execute(null);
             }
             else SelectedQuestion = ActivePack?.Questions[SelectedIndex + 1];
         }
-
         private void PackOptions(object obj) => new PackOptions().ShowDialog();
     }
 }

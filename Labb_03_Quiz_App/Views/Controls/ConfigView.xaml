@@ -25,7 +25,7 @@
         <Style TargetType="Label">
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="FontSize" Value="16" />
-            <Setter Property="VerticalAlignment" Value="Bottom" />
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
         </Style>
 
     </UserControl.Resources>
@@ -41,7 +41,7 @@
         </Grid.RowDefinitions>
 
         <!-- Vänstra sidan -->
-        
+
         <Border Padding="10 10 0 0"
                 Visibility="{Binding ActivePack, Converter={StaticResource NullToHidden}}">
 
@@ -50,29 +50,29 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
-                
+
                 <Label Content="{Binding ActivePack.Name}" />
-                
+
                 <StackPanel Orientation="Horizontal"
                             Grid.Column="1"
                             HorizontalAlignment="Right">
-                    
+
                     <Button Content="{fa:Icon Sliders}" 
                             Command="{Binding PackOptionsCommand}"
                             Margin="5 5 0 5" />
-                    
+
                     <Button Content="{fa:Icon Plus}" 
                             Command="{Binding AddQuestionCommand}" 
                             Margin="5 5 0 5" />
-                    
+
                     <Button Content="{fa:Icon Minus}"
                             Command="{Binding DeleteQuestionCommand}"
                             Margin="5" />
-                    
+
                 </StackPanel>
             </Grid>
         </Border>
-               
+
         <ListBox Grid.Row="1"
                  HorizontalAlignment="Stretch"
                  SelectionMode="Multiple"
@@ -92,17 +92,17 @@
             </ListBox.ItemTemplate>
 
         </ListBox>
-            
+
 
         <!-- Högra Sidan -->
 
         <Border Grid.Column="1"
                 Padding="10 10 10 0"
                 Visibility="{Binding SelectedQuestion, Converter={StaticResource NullToHidden}}">
-            
+
             <Label Content="Question:" />
         </Border>
-        
+
         <Border Grid.Row="1" Grid.Column="1"
                 Padding="10 0 10 0"
                 Visibility="{Binding SelectedQuestion, Converter={StaticResource NullToHidden}}">
@@ -114,7 +114,7 @@
 
                 <Label Content="Correct Answer:"/>
                 <TextBox Text="{Binding SelectedQuestion.CorrectAnswer, UpdateSourceTrigger=PropertyChanged}" />
-                
+
                 <Label Content="Incorrect Answers:"/>
                 <TextBox Text="{Binding SelectedQuestion.IncorrectAnswers[0], UpdateSourceTrigger=PropertyChanged}" />
                 <TextBox Text="{Binding SelectedQuestion.IncorrectAnswers[1], UpdateSourceTrigger=PropertyChanged}" 
@@ -129,7 +129,5 @@
 
             </StackPanel>
         </Border>
-        
     </Grid>
-    
 </UserControl>

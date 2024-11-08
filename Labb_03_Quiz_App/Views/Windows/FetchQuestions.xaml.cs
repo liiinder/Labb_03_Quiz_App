@@ -1,20 +1,24 @@
 ﻿using System.Windows;
+using System.Windows.Input;
 
 namespace Labb_03_Quiz_App.View.Windows
 {
     /// <summary>
     /// Interaction logic for Fetch.xaml
     /// </summary>
-    public partial class Fetch : Window
+    public partial class FetchQuestions : Window
     {
-        public Fetch()
+        public FetchQuestions()
         {
             InitializeComponent();
+
+            DataContext = (App.Current.MainWindow as MainWindow)?.DataContext;
         }
+        private void CloseCommandHandler(object sender, ExecutedRoutedEventArgs e) => Close();
     }
 }
 
-//TODO: Currently not in use... Implement this.
+//TODO: Implement ImportQuestions, Currently not fully in use...
 
 
 // https://opentdb.com/api_config.php

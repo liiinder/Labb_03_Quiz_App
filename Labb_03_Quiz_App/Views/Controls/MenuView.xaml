@@ -28,7 +28,7 @@
 
                 <MenuItem Header="_Select Question Pack" 
                           Icon="{fa:Icon FolderOpen}"
-                          ItemsSource="{Binding Packs}"
+                          ItemsSource="{Binding Packs, UpdateSourceTrigger=PropertyChanged}"
                           IsEnabled="{Binding InConfigMode}">
                     <MenuItem.ItemContainerStyle>
                         <Style TargetType="MenuItem">
@@ -58,13 +58,14 @@
                 <MenuItem Header="_Import Questions" InputGestureText="Ctrl+I" 
                           Icon="{fa:Icon CloudArrowDown}" 
                           IsEnabled="{Binding InConfigMode}" 
-                          Command="{Binding ImportQuestionsCommand}"/>
+                          Command="{Binding ImportQuestionsCommand}" />
                 
                 <Separator/>
                 
                 <MenuItem Header="_Exit" InputGestureText="Alt+F4"
                           Icon="{fa:Icon DoorOpen}" 
-                          Command="{Binding ExitWindowCommand}"/>
+                          Command="{Binding ExitWindowCommand}" />
+                
             </MenuItem>
 
             <MenuItem Header="_Edit"

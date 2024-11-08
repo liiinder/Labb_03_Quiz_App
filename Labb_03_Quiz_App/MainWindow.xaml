@@ -24,6 +24,7 @@
         <KeyBinding Key="P" Modifiers="Ctrl" Command="{Binding SwitchModeCommand}" CommandParameter="GameMode" />
         <KeyBinding Key="E" Modifiers="Ctrl" Command="{Binding SwitchModeCommand}" CommandParameter="ConfigMode" />
         <KeyBinding Key="Enter" Modifiers="Alt" Command="{Binding FullScreenCommand}" />
+        <KeyBinding Key="I" Modifiers="Ctrl" Command="{Binding ImportQuestionsCommand}" />
     </Window.InputBindings>
     <Grid>
 

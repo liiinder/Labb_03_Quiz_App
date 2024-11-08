@@ -1,7 +1,5 @@
-﻿using Labb_03_Quiz_App.View.Windows;
-using Labb_03_Quiz_App.ViewModels;
+﻿using Labb_03_Quiz_App.ViewModels;
 using System.Windows;
-using static System.Windows.Forms.AxHost;
 
 namespace Labb_03_Quiz_App
 {
@@ -23,6 +21,7 @@ namespace Labb_03_Quiz_App
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             await mainWindowVM.LoadPacks();
+            await mainWindowVM.ImportCategories();
         }
     }
 }

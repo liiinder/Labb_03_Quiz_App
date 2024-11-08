@@ -2,8 +2,8 @@
 using Labb_03_Quiz_App.Models;
 using Labb_03_Quiz_App.View.Windows;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
+using System.Net.Http;
 using System.Text.Json;
 using System.Windows;
 
@@ -11,9 +11,12 @@ namespace Labb_03_Quiz_App.ViewModels
 {
     internal class MainWindowViewModel : ViewModelBase
     {
+        private static readonly HttpClient client = new HttpClient() { BaseAddress = new Uri("https://opentdb.com/") };
+
         private QuestionPackViewModel? _activePack;
         private bool _inConfigMode;
         private bool _inGameMode;
+        private bool _hasInternetConnection;
         private static string pathToFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Labb_03_Quiz_App");
         private static string pathToFile = Path.Combine(pathToFolder, "QuestionPacks.json");
 
@@ -29,6 +32,7 @@ namespace Labb_03_Quiz_App.ViewModels
             }
         }
         public ObservableCollection<QuestionPackViewModel> Packs { get; set; }
+        public ObservableCollection<Category> Categories { get; set; }
         public ConfigViewModel ConfigViewModel { get; }
         public GameViewModel GameViewModel { get; }
         public string CurrentMode { get; set; }
@@ -53,6 +57,15 @@ namespace Labb_03_Quiz_App.ViewModels
                 GameViewModel.StartQuizCommand.Execute(null);
             }
         }
+        public bool HasInternetConnection
+        {
+            get => _hasInternetConnection;
+            set
+            {
+                _hasInternetConnection = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public DelegateCommand AddNewPackCommand { get; }
         public DelegateCommand SelectPackCommand { get; }
@@ -72,16 +85,38 @@ namespace Labb_03_Quiz_App.ViewModels
 
             ActivePack = null;
             Packs = new ObservableCollection<QuestionPackViewModel>();
+            Categories = new ObservableCollection<Category>();
+            Categories.Add(new Category(0, "Any"));
 
-            AddNewPackCommand = new DelegateCommand(AddNewPack);
-            SelectPackCommand = new DelegateCommand(SelectPack);
-            DeletePackCommand = new DelegateCommand(DeletePack);
-            ImportQuestionsCommand = new DelegateCommand(ImportQuestions);
+            AddNewPackCommand = new DelegateCommand(AddNewPack, ConfigViewModel.CanModifyPacks);
+            SelectPackCommand = new DelegateCommand(SelectPack, ConfigViewModel.CanModifyPacks);
+            DeletePackCommand = new DelegateCommand(DeletePack, ConfigViewModel.CanModifyPacks);
+            ImportQuestionsCommand = new DelegateCommand(ImportQuestions, CanImportQuestions);
             ExitWindowCommand = new DelegateCommand(ExitWindow);
             SwitchModeCommand = new DelegateCommand(SwitchMode);
             FullScreenCommand = new DelegateCommand(FullScreen);
         }
 
+        public async Task ImportCategories()
+        {
+            string response = string.Empty;
+            try
+            {
+                response = await client.GetStringAsync("api_category.php");
+            }
+            finally
+            {
+                var jsonDeserialized = JsonSerializer.Deserialize<Categories>(response);
+                if (jsonDeserialized is not null)
+                {
+                    foreach (Category cat in jsonDeserialized.ListOfCategories) Categories.Add(cat);
+                }
+                HasInternetConnection = true;
+            }
+            //TODO: fix so that you can use the import questions button in the menu
+            // if HasInternetConnection is false, and then run this method again.
+            // if it fails, pop up a message that the user doesn't have Internet connection.
+        }
         public async Task LoadPacks()
         {
             Directory.CreateDirectory(pathToFolder);
@@ -108,15 +143,17 @@ namespace Labb_03_Quiz_App.ViewModels
             Packs.Remove(ActivePack);
             ActivePack = (Packs.Count > 0) ? Packs[^1] : null;
         }
-        public void ImportQuestions(object obj)
-        {
-            string json = File.ReadAllText(pathToFolder + "\\Hardcoded_API_Response.json");
-            var importedQuestions = JsonSerializer.Deserialize<List<OpenTDb>>(json);
-            Debug.WriteLine(json[0]);
-            Debug.WriteLine("Not yet implemented/working");
-            //TODO: Implement this...
-        }
-        public void ExitWindow(object obj)
+        private bool CanImportQuestions(object? arg) => (HasInternetConnection && InConfigMode && ActivePack is not null);
+        private void ImportQuestions(object obj) => new FetchQuestions().ShowDialog();
+        //TODO: Implement ImportQuestions...
+
+        // url = https://opentdb.com/api.php?amount=10&category=17&difficulty=easy&type=multiple
+        // string difficultyUrl = (choosendiff.. == Any) ? "" : "&difficulty={choosendiff..}";
+        // $"amount={sliderValue..}{choosenCategory.Url..}{difficultyUrl}&type=multiple";
+
+        //TODO: Add functionality so if you add questions from OpenTDb that it doesn't add duplicates
+
+        private void ExitWindow(object obj)
         {
             string jsonString = JsonSerializer.Serialize(Packs);
             File.WriteAllText(pathToFile, jsonString);

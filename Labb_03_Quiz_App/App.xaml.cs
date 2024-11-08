@@ -1,6 +1,4 @@
-﻿using System.Configuration;
-using System.Data;
-using System.Windows;
+﻿using System.Windows;
 
 namespace Labb_03_Quiz_App
 {
@@ -10,5 +8,4 @@ namespace Labb_03_Quiz_App
     public partial class App : Application
     {
     }
-
 }

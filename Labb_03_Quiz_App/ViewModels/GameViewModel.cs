@@ -16,7 +16,7 @@ namespace Labb_03_Quiz_App.ViewModels
         private bool? _resultScreen;
         private int TimeBetweenQuestions = 2;
 
-        public bool? IsActive { get => mainWindowViewModel?.InGameMode; }
+        public bool IsActive { get => (mainWindowViewModel is null ? false : mainWindowViewModel.InGameMode); }
         public QuestionPackViewModel? ActivePack { get => mainWindowViewModel?.ActivePack; }
 
         public Stack<Question>? UnansweredQuestions { get; set; }
@@ -97,6 +97,7 @@ namespace Labb_03_Quiz_App.ViewModels
             timer.Tick += Timer_Tick;
             timer.Start();
         }
+
         private void GuessAnswer(object guess)
         {
             if (!HasGuessed)
@@ -124,7 +125,7 @@ namespace Labb_03_Quiz_App.ViewModels
         }
         private void NextQuestion()
         {
-            QuestionIndex++;
+            QuestionIndex = ActivePack.Questions.Count() - UnansweredQuestions.Count() + 1;
             if (UnansweredQuestions?.Count > 0)
             {
                 HasGuessed = false;
@@ -144,12 +145,11 @@ namespace Labb_03_Quiz_App.ViewModels
             }
             RaisePropertyChanged("UnansweredQuestions");
         }
-        public void StartQuiz(object obj)
+        private void StartQuiz(object obj)
         {
             ResultScreen = null;
             AmountOfQuestions = ActivePack.Questions.Count();
             CorrectGuesses = 0;
-            QuestionIndex = 0;
 
             var tempListOfQuestions = new List<Question>();
             foreach (Question q in ActivePack.Questions) tempListOfQuestions.Add(q);

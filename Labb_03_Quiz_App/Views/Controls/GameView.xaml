@@ -53,31 +53,34 @@
 
         <Grid Visibility="{Binding UnansweredQuestions, Converter={StaticResource NullToHidden}}">
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
             <Label x:Name="Timer"
                    Content="{Binding TimeLeft}"
                    FontWeight="Bold"
                    FontSize="30"
+                   VerticalAlignment="Top"
                    HorizontalAlignment="Right" />
 
-            <Border Grid.Row="1"
-                    VerticalAlignment="Bottom"
-                    Padding="80 0 80 80">
-                <StackPanel>
-                    <TextBlock FontSize="30" Text="{Binding ActiveQuestion}" />
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-                    <TextBlock Margin="0 20 0 0">
+                <TextBlock FontSize="30" 
+                           Margin="65 0"
+                           Text="{Binding ActiveQuestion}" />
+
+                <StackPanel Grid.Row="1"
+                            VerticalAlignment="Bottom">
+                    
+                    <TextBlock>
                         <Run Text="Question"/>
                         <Run Text="{Binding QuestionIndex}" Style="{StaticResource ChangeableNumbers}"/>
                         <Run Text="of" />
                         <Run Text="{Binding AmountOfQuestions}" Style="{StaticResource ChangeableNumbers}"/>
                     </TextBlock>
 
-                    <Grid>
+                    <Grid Margin="80 0 80 8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
@@ -124,17 +127,17 @@
                         </Border>
 
                         <Image Grid.Row="0" Grid.Column="0" 
-                               Source="{Binding ActiveAnswers[0].Color, Converter={StaticResource AnswerImage}}" />
+                                Source="{Binding ActiveAnswers[0].Color, Converter={StaticResource AnswerImage}}" />
                         <Image Grid.Row="0" Grid.Column="1" 
-                               Source="{Binding ActiveAnswers[1].Color, Converter={StaticResource AnswerImage}}" />
+                                Source="{Binding ActiveAnswers[1].Color, Converter={StaticResource AnswerImage}}" />
                         <Image Grid.Row="1" Grid.Column="0" 
-                               Source="{Binding ActiveAnswers[2].Color, Converter={StaticResource AnswerImage}}" />
+                                Source="{Binding ActiveAnswers[2].Color, Converter={StaticResource AnswerImage}}" />
                         <Image Grid.Row="1" Grid.Column="1" 
-                               Source="{Binding ActiveAnswers[3].Color, Converter={StaticResource AnswerImage}}" />
+                                Source="{Binding ActiveAnswers[3].Color, Converter={StaticResource AnswerImage}}" />
 
                     </Grid>
                 </StackPanel>
-            </Border>
+            </Grid>
         </Grid>
 
         <Grid Visibility="{Binding ResultScreen, Converter={StaticResource NullToHidden}}">

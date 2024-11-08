@@ -27,7 +27,7 @@
         </Style>
     </Window.Resources>
 
-    <Grid>
+    <Grid Background="#FFF8F7DF">
         <Border Padding="10 5 10 0">
             <StackPanel DataContext="{Binding ConfigViewModel}" >
 
@@ -64,7 +64,7 @@
                         Maximum="120"
                         Value="{Binding ActivePack.TimeLimitInSeconds}"
                         Foreground="DarkGray" />
-                
+
             </StackPanel>
         </Border>
     </Grid>
