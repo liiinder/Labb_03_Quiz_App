@@ -1,18 +1,18 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 
-namespace Labb_03_Quiz_App.View.Windows
+namespace Labb_03_Quiz_App.Dialogs
 {
     /// <summary>
     /// Interaction logic for Fetch.xaml
     /// </summary>
-    public partial class FetchQuestions : Window
+    public partial class FetchQuestionsDialog : Window
     {
-        public FetchQuestions()
+        public FetchQuestionsDialog()
         {
             InitializeComponent();
 
-            DataContext = (App.Current.MainWindow as MainWindow)?.DataContext;
+            //DataContext = (App.Current.MainWindow as MainWindow)?.DataContext;
         }
         private void CloseCommandHandler(object sender, ExecutedRoutedEventArgs e) => Close();
     }

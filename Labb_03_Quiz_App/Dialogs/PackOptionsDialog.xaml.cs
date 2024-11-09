@@ -1,18 +1,18 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 
-namespace Labb_03_Quiz_App.View.Windows
+namespace Labb_03_Quiz_App.Dialogs
 {
     /// <summary>
     /// Interaction logic for PackOptions.xaml
     /// </summary>
-    public partial class PackOptions : Window
+    public partial class PackOptionsDialog : Window
     {
-        public PackOptions()
+        public PackOptionsDialog()
         {
             InitializeComponent();
 
-            DataContext = (App.Current.MainWindow as MainWindow)?.DataContext;
+            //DataContext = (App.Current.MainWindow as MainWindow)?.DataContext;
         }
         private void CloseCommandHandler(object sender, ExecutedRoutedEventArgs e) => Close();
     }

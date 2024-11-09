@@ -1,7 +1,7 @@
 ﻿using Labb_03_Quiz_App.Commands;
 using Labb_03_Quiz_App.DataTypes;
+using Labb_03_Quiz_App.Dialogs;
 using Labb_03_Quiz_App.Models;
-using Labb_03_Quiz_App.View.Windows;
 
 namespace Labb_03_Quiz_App.ViewModels
 {
@@ -69,6 +69,6 @@ namespace Labb_03_Quiz_App.ViewModels
             }
             else SelectedQuestion = ActivePack?.Questions[SelectedIndex + 1];
         }
-        private void PackOptions(object obj) => new PackOptions().ShowDialog();
+        private void PackOptions(object obj) => new PackOptionsDialog().ShowDialog();
     }
 }

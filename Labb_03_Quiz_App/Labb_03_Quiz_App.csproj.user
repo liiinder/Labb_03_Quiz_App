@@ -7,36 +7,36 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Views\Controls\ConfigView.xaml.cs">
+    <Compile Update="Views\ConfigView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Controls\MenuView.xaml.cs">
+    <Compile Update="Views\MenuView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Controls\GameView.xaml.cs">
+    <Compile Update="Views\GameView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Windows\PackOptions.xaml.cs">
+    <Compile Update="Dialogs\PackOptionsDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Windows\FetchQuestions.xaml.cs">
+    <Compile Update="Dialogs\FetchQuestionsDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Views\Controls\ConfigView.xaml">
+    <Page Update="Views\ConfigView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Controls\MenuView.xaml">
+    <Page Update="Views\MenuView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Controls\GameView.xaml">
+    <Page Update="Views\GameView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Windows\PackOptions.xaml">
+    <Page Update="Dialogs\PackOptionsDialog.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Windows\FetchQuestions.xaml">
+    <Page Update="Dialogs\FetchQuestionsDialog.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">

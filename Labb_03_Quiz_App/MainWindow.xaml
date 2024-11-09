@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Labb_03_Quiz_App"
-        xmlns:controls="clr-namespace:Labb_03_Quiz_App.View.Controls"
+        xmlns:controls="clr-namespace:Labb_03_Quiz_App.View"
         xmlns:converters="clr-namespace:Labb_03_Quiz_App.Converters"
         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         mc:Ignorable="d"

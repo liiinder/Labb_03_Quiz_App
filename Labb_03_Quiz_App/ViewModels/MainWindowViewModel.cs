@@ -1,6 +1,6 @@
 ﻿using Labb_03_Quiz_App.Commands;
+using Labb_03_Quiz_App.Dialogs;
 using Labb_03_Quiz_App.Models;
-using Labb_03_Quiz_App.View.Windows;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Net.Http;
@@ -132,7 +132,7 @@ namespace Labb_03_Quiz_App.ViewModels
         {
             ActivePack = new QuestionPackViewModel(new QuestionPack());
             Packs.Add(ActivePack);
-            new PackOptions().ShowDialog();
+            new PackOptionsDialog().ShowDialog();
         }
         private void SelectPack(object obj)
         {
@@ -144,7 +144,7 @@ namespace Labb_03_Quiz_App.ViewModels
             ActivePack = (Packs.Count > 0) ? Packs[^1] : null;
         }
         private bool CanImportQuestions(object? arg) => (HasInternetConnection && InConfigMode && ActivePack is not null);
-        private void ImportQuestions(object obj) => new FetchQuestions().ShowDialog();
+        private void ImportQuestions(object obj) => new FetchQuestionsDialog().ShowDialog();
         //TODO: Implement ImportQuestions...
 
         // url = https://opentdb.com/api.php?amount=10&category=17&difficulty=easy&type=multiple
