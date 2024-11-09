@@ -10,13 +10,16 @@ namespace Labb_03_Quiz_App.Models
         [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        public string Url { get; set; }
-
         public Category(int id, string name)
         {
             Id = id;
             Name = name;
-            Url = (id > 0) ? $"&category={id}" : "";
+        }
+
+        public Category()
+        {
+            Id = 0;
+            Name = string.Empty;
         }
     }
 }

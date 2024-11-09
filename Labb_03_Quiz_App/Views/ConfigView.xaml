@@ -83,7 +83,7 @@
 
         <ListBox Grid.Row="1"
                  HorizontalAlignment="Stretch"
-                 SelectionMode="Multiple"
+                 SelectionMode="Single"
                  SelectionChanged="questions_SelectionChanged"
                  ItemsSource="{Binding ActivePack.Questions}"
                  SelectedItem="{Binding SelectedQuestion}"
@@ -138,7 +138,7 @@
                                     Command="{Binding SwapQuestionCommand}" />
                     </TextBox.InputBindings>
                 </TextBox>
-
+                
             </StackPanel>
         </Border>
     </Grid>

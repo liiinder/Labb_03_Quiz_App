@@ -47,27 +47,38 @@ namespace Labb_03_Quiz_App.ViewModels
         }
         private void DeleteQuestion(object obj)
         {
-            int SelectedIndex = ActivePack.Questions.IndexOf(SelectedQuestion);
-            ActivePack?.Questions.Remove(SelectedQuestion);
-
-            if (ActivePack?.Questions.Count > 0)
+            if (ActivePack is not null)
             {
-                if (SelectedIndex == ActivePack?.Questions.Count || SelectedIndex == -1)
+                int SelectedIndex = ActivePack.Questions.IndexOf(SelectedQuestion);
+
+                if (SelectedIndex >= 0) ActivePack?.Questions.Remove(SelectedQuestion);
+
+                if (ActivePack?.Questions.Count > 0)
                 {
-                    SelectedQuestion = ActivePack?.Questions[^1];
+                    if (SelectedIndex == ActivePack?.Questions.Count || SelectedIndex == -1)
+                    {
+                        SelectedQuestion = ActivePack?.Questions[^1];
+                    }
+                    else SelectedQuestion = ActivePack?.Questions[SelectedIndex];
                 }
-                else SelectedQuestion = ActivePack?.Questions[SelectedIndex];
+                else
+                {
+                    SelectedQuestion = null;
+                }
             }
         }
         private void SwapQuestion(object obj)
         {
-            int SelectedIndex = ActivePack.Questions.IndexOf(SelectedQuestion);
-
-            if (SelectedQuestion == ActivePack?.Questions[^1])
+            if (ActivePack is not null)
             {
-                AddQuestionCommand.Execute(null);
+                int SelectedIndex = ActivePack.Questions.IndexOf(SelectedQuestion);
+
+                if (SelectedQuestion == ActivePack?.Questions[^1])
+                {
+                    AddQuestionCommand.Execute(null);
+                }
+                else SelectedQuestion = ActivePack?.Questions[SelectedIndex + 1];
             }
-            else SelectedQuestion = ActivePack?.Questions[SelectedIndex + 1];
         }
         private void PackOptions(object obj) => new PackOptionsDialog().ShowDialog();
     }

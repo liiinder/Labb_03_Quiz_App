@@ -25,6 +25,14 @@ namespace Labb_03_Quiz_App.Dialogs
                 await mainWindowVM.ImportCategories();
             }
         }
+        private async void Import_Questions(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is MainWindowViewModel mainWindowVM)
+            {
+                await mainWindowVM.ImportQuestions();
+                Close();
+            }
+        }
     }
 }
 

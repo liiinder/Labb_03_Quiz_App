@@ -3,6 +3,7 @@ using Labb_03_Quiz_App.Dialogs;
 using Labb_03_Quiz_App.Models;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Text.Json;
 using System.Windows;
@@ -29,12 +30,14 @@ namespace Labb_03_Quiz_App.ViewModels
                 RaisePropertyChanged();
                 ConfigViewModel.RaisePropertyChanged("ActivePack");
                 GameViewModel.RaisePropertyChanged("ActivePack");
+                RaisePropertyChanged("CanImportOrPlay");
             }
         }
         public ObservableCollection<QuestionPackViewModel> Packs { get; set; }
         public ObservableCollection<Category> Categories { get; set; }
         public ConfigViewModel ConfigViewModel { get; }
         public GameViewModel GameViewModel { get; }
+        public OpenTDb OpenTDbApi { get; set; }
         public string CurrentMode { get; set; }
         public bool InConfigMode
         {
@@ -43,6 +46,7 @@ namespace Labb_03_Quiz_App.ViewModels
             {
                 _inConfigMode = value;
                 RaisePropertyChanged();
+                RaisePropertyChanged("CanImportOrPlay");
                 ConfigViewModel.RaisePropertyChanged("IsActive");
             }
         }
@@ -54,9 +58,15 @@ namespace Labb_03_Quiz_App.ViewModels
                 _inGameMode = value;
                 RaisePropertyChanged();
                 GameViewModel.RaisePropertyChanged("IsActive");
-                GameViewModel.StartQuizCommand.Execute(null);
+                if (ActivePack is not null) GameViewModel.StartQuizCommand.Execute(null);
             }
         }
+
+        //TODO: Clean up and add options to disable menu options if conditions is not met.
+        // like only delete packs if there is a pack to delete
+        // delete question menu option if any is selected
+
+        public bool CanImportOrPlay { get => (InConfigMode && ActivePack is not null); }
         public bool HasImportedCategories
         {
             get => _hasImportedCategories;
@@ -70,7 +80,7 @@ namespace Labb_03_Quiz_App.ViewModels
         public DelegateCommand AddNewPackCommand { get; }
         public DelegateCommand SelectPackCommand { get; }
         public DelegateCommand DeletePackCommand { get; }
-        public DelegateCommand ImportQuestionsCommand { get; }
+        public DelegateCommand OpenImportQuestionsDialogCommand { get; }
         public DelegateCommand ExitWindowCommand { get; }
         public DelegateCommand SwitchModeCommand { get; }
         public DelegateCommand FullScreenCommand { get; }
@@ -85,13 +95,15 @@ namespace Labb_03_Quiz_App.ViewModels
 
             ActivePack = null;
             Packs = new ObservableCollection<QuestionPackViewModel>();
+
             Categories = new ObservableCollection<Category>();
             Categories.Add(new Category(0, "Any"));
+            OpenTDbApi = new OpenTDb(Categories[0]);
 
             AddNewPackCommand = new DelegateCommand(AddNewPack, ConfigViewModel.CanModifyPacks);
             SelectPackCommand = new DelegateCommand(SelectPack, ConfigViewModel.CanModifyPacks);
             DeletePackCommand = new DelegateCommand(DeletePack, ConfigViewModel.CanModifyPacks);
-            ImportQuestionsCommand = new DelegateCommand(ImportQuestions, CanImportQuestions);
+            OpenImportQuestionsDialogCommand = new DelegateCommand(OpenImportQuestionDialog, ConfigViewModel.CanModifyPacks);
             ExitWindowCommand = new DelegateCommand(ExitWindow);
             SwitchModeCommand = new DelegateCommand(SwitchMode);
             FullScreenCommand = new DelegateCommand(FullScreen);
@@ -119,6 +131,38 @@ namespace Labb_03_Quiz_App.ViewModels
             // Maybe a small loading animation?
             // And then the correct catch message if it doesnt work.
         }
+
+        public async Task ImportQuestions()
+        {
+            string response = string.Empty;
+            try
+            {
+                response = await client.GetStringAsync(OpenTDbApi.Url);
+
+                var deserialized = JsonSerializer.Deserialize<OpenTDb>(response);
+                if (deserialized is not null && deserialized.Response == 0)
+                {
+                    foreach (Question q in deserialized.ListOfQuestions)
+                    {
+                        Question temp = new();
+                        temp.Query = WebUtility.HtmlDecode(q.Query);
+                        temp.CorrectAnswer = WebUtility.HtmlDecode(q.CorrectAnswer);
+                        temp.IncorrectAnswers = q.IncorrectAnswers.Select(item => WebUtility.HtmlDecode(item)).ToArray();
+                        ActivePack?.Questions.Add(temp);
+                    }
+                    ConfigViewModel.SelectedQuestion = ActivePack?.Questions[^1];
+                }
+            }
+            catch
+            {
+            }
+
+            //TODO: Add response feedback to the user if the import fails
+            // If it fails because there isnt enough questions, set slider to the amount that exists
+
+            //TODO: Look into making the project/code more "SOLID"
+        }
+
         public async Task LoadPacks()
         {
             Directory.CreateDirectory(pathToFolder);
@@ -145,14 +189,10 @@ namespace Labb_03_Quiz_App.ViewModels
             Packs.Remove(ActivePack);
             ActivePack = (Packs.Count > 0) ? Packs[^1] : null;
         }
-        private bool CanImportQuestions(object? arg) => (InConfigMode && ActivePack is not null);
-        private void ImportQuestions(object obj) => new FetchQuestionsDialog().ShowDialog();
-        //TODO: Implement ImportQuestions...
-
-        // url = https://opentdb.com/api.php?amount=10&category=17&difficulty=easy&type=multiple
-        // string difficultyUrl = (choosendiff.. == Any) ? "" : "&difficulty={choosendiff..}";
-        // $"amount={sliderValue..}{choosenCategory.Url..}{difficultyUrl}&type=multiple";
-
+        private void OpenImportQuestionDialog(object obj)
+        {
+            new FetchQuestionsDialog().ShowDialog();
+        }
         //TODO: Add functionality so if you add questions from OpenTDb that it doesn't add duplicates
 
         private void ExitWindow(object obj)

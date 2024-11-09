@@ -48,19 +48,25 @@
             </StackPanel>
         </Border>
 
+        <!-- 
+        
+        Bind this to an object with all its members.
+        
+        -->
+        
         <Border Padding="10"
                 Visibility="{Binding HasImportedCategories, Converter={StaticResource BoolToVisibility}}">
             <StackPanel>
                 <Label Content="Category:" />
                 <ComboBox ToolTip="Select Category" 
                           ItemsSource="{Binding Categories}" 
-                          SelectedIndex="0"
+                          SelectedValue="{Binding OpenTDbApi.Cat}"
                           DisplayMemberPath="Name" />
 
                 <Label Content="Difficulty" />
                 <ComboBox ToolTip="Select Difficulty"
                           ItemsSource="{Binding ConfigViewModel.Difficulties}"
-                          SelectedIndex="0" />
+                          SelectedValue="{Binding OpenTDbApi.Difficulty}" />
 
                 <StackPanel Orientation="Horizontal">
 
@@ -75,7 +81,7 @@
                         IsSnapToTickEnabled="True"
                         Minimum="1"
                         Maximum="50"
-                        Value="5"
+                        Value="{Binding OpenTDbApi.AmountOfQuestions}"
                         Foreground="DarkGray"/>
 
                 <Grid Margin="0 10 0 0">
@@ -89,6 +95,7 @@
 
                     <Button Grid.Column="1"
                             Content="Import"
+                            Click="Import_Questions"
                             Margin="10 0 0 0" />
 
                 </Grid>

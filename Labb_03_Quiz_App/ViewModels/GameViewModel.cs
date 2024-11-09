@@ -1,5 +1,6 @@
 ﻿using Labb_03_Quiz_App.Commands;
 using Labb_03_Quiz_App.Models;
+using System.Diagnostics;
 using System.Windows.Threading;
 
 namespace Labb_03_Quiz_App.ViewModels
@@ -140,8 +141,11 @@ namespace Labb_03_Quiz_App.ViewModels
             }
             else
             {
+                Debug.WriteLine(ActivePack);
+                Debug.WriteLine(mainWindowViewModel.Packs.Count);
                 UnansweredQuestions = null;
                 ResultScreen = true;
+                timer.Stop();
             }
             RaisePropertyChanged("UnansweredQuestions");
         }

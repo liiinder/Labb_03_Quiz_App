@@ -30,8 +30,9 @@
         </Style>
 
         <Style TargetType="TextBlock">
-            <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="TextAlignment" Value="Center" />
             <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
         
@@ -135,7 +136,7 @@
             
             <Border VerticalAlignment="Top"
                     HorizontalAlignment="Right"
-                    Background="#afff"
+                    Background="#9fff"
                     BorderBrush="{StaticResource DefaultBorderColor}"
                     BorderThickness="1"
                     Margin="5"
@@ -167,6 +168,7 @@
 
                     <Button Content="{fa:Icon Repeat}"
                             FontSize="24"
+                            Foreground="#333"
                             Margin="10"
                             Width="100"
                             Height="75"
