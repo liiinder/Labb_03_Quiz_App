@@ -56,7 +56,7 @@
                 <Separator/>
                 
                 <MenuItem Header="_Import Questions" InputGestureText="Ctrl+I" 
-                          Icon="{fa:Icon CloudArrowDown}" 
+                          Icon="{fa:Icon CloudArrowDown}"
                           IsEnabled="{Binding InConfigMode}" 
                           Command="{Binding ImportQuestionsCommand}" />
                 

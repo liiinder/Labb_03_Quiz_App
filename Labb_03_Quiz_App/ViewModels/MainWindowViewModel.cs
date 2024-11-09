@@ -16,7 +16,7 @@ namespace Labb_03_Quiz_App.ViewModels
         private QuestionPackViewModel? _activePack;
         private bool _inConfigMode;
         private bool _inGameMode;
-        private bool _hasInternetConnection;
+        private bool _hasImportedCategories;
         private static string pathToFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Labb_03_Quiz_App");
         private static string pathToFile = Path.Combine(pathToFolder, "QuestionPacks.json");
 
@@ -57,12 +57,12 @@ namespace Labb_03_Quiz_App.ViewModels
                 GameViewModel.StartQuizCommand.Execute(null);
             }
         }
-        public bool HasInternetConnection
+        public bool HasImportedCategories
         {
-            get => _hasInternetConnection;
+            get => _hasImportedCategories;
             set
             {
-                _hasInternetConnection = value;
+                _hasImportedCategories = value;
                 RaisePropertyChanged();
             }
         }
@@ -103,19 +103,21 @@ namespace Labb_03_Quiz_App.ViewModels
             try
             {
                 response = await client.GetStringAsync("api_category.php");
-            }
-            finally
-            {
+
                 var jsonDeserialized = JsonSerializer.Deserialize<Categories>(response);
                 if (jsonDeserialized is not null)
                 {
                     foreach (Category cat in jsonDeserialized.ListOfCategories) Categories.Add(cat);
                 }
-                HasInternetConnection = true;
+                HasImportedCategories = true;
             }
-            //TODO: fix so that you can use the import questions button in the menu
-            // if HasInternetConnection is false, and then run this method again.
-            // if it fails, pop up a message that the user doesn't have Internet connection.
+            catch
+            {
+            }
+
+            //TODO: Add some kind of feedback to the user under the "Import Category" button that this is importing...
+            // Maybe a small loading animation?
+            // And then the correct catch message if it doesnt work.
         }
         public async Task LoadPacks()
         {
@@ -143,7 +145,7 @@ namespace Labb_03_Quiz_App.ViewModels
             Packs.Remove(ActivePack);
             ActivePack = (Packs.Count > 0) ? Packs[^1] : null;
         }
-        private bool CanImportQuestions(object? arg) => (HasInternetConnection && InConfigMode && ActivePack is not null);
+        private bool CanImportQuestions(object? arg) => (InConfigMode && ActivePack is not null);
         private void ImportQuestions(object obj) => new FetchQuestionsDialog().ShowDialog();
         //TODO: Implement ImportQuestions...
 

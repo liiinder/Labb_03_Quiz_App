@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Labb_03_Quiz_App.ViewModels;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Labb_03_Quiz_App.Dialogs
@@ -16,6 +17,14 @@ namespace Labb_03_Quiz_App.Dialogs
             Owner = App.Current.MainWindow;
         }
         private void CloseCommandHandler(object sender, ExecutedRoutedEventArgs e) => Close();
+
+        private async void Import_Categories(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is MainWindowViewModel mainWindowVM)
+            {
+                await mainWindowVM.ImportCategories();
+            }
+        }
     }
 }
 

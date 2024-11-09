@@ -120,10 +120,9 @@
                 Padding="10 0 10 0"
                 Visibility="{Binding SelectedQuestion, Converter={StaticResource NullToHidden}}">
             <StackPanel>
-                <TextBox x:Name="QueryTextBox"
+                <TextBox Text="{Binding SelectedQuestion.Query, UpdateSourceTrigger=PropertyChanged}"
                          Height="100"
-                         TextWrapping="Wrap"
-                         Text="{Binding SelectedQuestion.Query, UpdateSourceTrigger=PropertyChanged}" />
+                         TextWrapping="Wrap" />
 
                 <Label Content="Correct Answer:"/>
                 <TextBox Text="{Binding SelectedQuestion.CorrectAnswer, UpdateSourceTrigger=PropertyChanged}" />
