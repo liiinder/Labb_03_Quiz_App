@@ -6,8 +6,8 @@
         xmlns:converters="clr-namespace:Labb_03_Quiz_App.Converters"
         mc:Ignorable="d"
         WindowStyle="ToolWindow"
-        WindowStartupLocation="CenterScreen"
-        Title="Pack Options" Height="190" Width="200"
+        WindowStartupLocation="CenterOwner"
+        Title="Pack Options" Height="200" Width="275"
         FocusManager.FocusedElement="{Binding ElementName=SetPackName}">
 
     <Window.CommandBindings>
@@ -20,14 +20,11 @@
     </Window.InputBindings>
 
     <Window.Resources>
-        <Style TargetType="Label">
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="FontSize" Value="12" />
-            <Setter Property="Padding" Value="2 5 2 1" />
-        </Style>
+        <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxStyle}" />
+        <Style TargetType="Label" BasedOn="{StaticResource LabelStyle}" />
     </Window.Resources>
 
-    <Grid Background="#FFF8F7DF">
+    <Grid Background="#77F8F7DF">
         <Border Padding="10 5 10 0">
             <StackPanel DataContext="{Binding ConfigViewModel}" >
 
@@ -49,7 +46,6 @@
                     </Grid.ColumnDefinitions>
 
                     <Label Content="Time Limit:" />
-
                     <Label Grid.Column="1"
                            FontWeight="Normal"
                            HorizontalAlignment="Right" 

@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         WindowStyle="ToolWindow"
-        WindowStartupLocation="CenterScreen"
-        Title="Import Questions" Height="250" Width="400">
+        WindowStartupLocation="CenterOwner"
+        Title="Import Questions" Height="250" Width="300">
 
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.Close"
@@ -19,36 +19,29 @@
 
     <Window.Resources>
         <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}" />
-
-        <Style TargetType="Label">
-            <Setter Property="Padding" Value="0 7 0 4" />
-            <Setter Property="FontWeight" Value="Bold" />
-        </Style>
-        <Style TargetType="ComboBox">
-            <Setter Property="SelectedIndex" Value="0" />
-        </Style>
+        <Style TargetType="Label" BasedOn="{StaticResource LabelStyle}" />
     </Window.Resources>
 
-    <Grid Background="#FFE8E8F7">
+    <Grid Background="#99E8E8F7">
 
         <Border Padding="10">
             <StackPanel>
 
-                <Label Content="Category:" 
-                       Padding="0 0 0 4"/>
+                <Label Content="Category:" />
                 <ComboBox ToolTip="Select Category" 
                           ItemsSource="{Binding Categories}" 
+                          SelectedIndex="0"
                           DisplayMemberPath="Name" />
 
                 <Label Content="Difficulty" />
                 <ComboBox ToolTip="Select Difficulty"
-                          ItemsSource="{Binding ConfigViewModel.Difficulties}" />
+                          ItemsSource="{Binding ConfigViewModel.Difficulties}"
+                          SelectedIndex="0" />
 
                 <StackPanel Orientation="Horizontal">
 
                     <Label Content="Number Of Questions:" />
-                    <Label Content="{Binding ElementName=amountSlider, Path=Value}" 
-                           Margin="5 0"/>
+                    <Label Content="{Binding ElementName=amountSlider, Path=Value}" />
 
                 </StackPanel>
 
@@ -59,8 +52,7 @@
                         Minimum="1"
                         Maximum="50"
                         Value="5"
-                        Foreground="DarkGray" >
-                </Slider>
+                        Foreground="DarkGray"/>
 
                 <Grid Margin="0 10 0 0">
                     <Grid.ColumnDefinitions>

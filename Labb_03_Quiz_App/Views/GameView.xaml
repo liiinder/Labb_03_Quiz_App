@@ -18,8 +18,8 @@
         <converters:AnswerColorConverter x:Key="AnswerColor" />
         <converters:AnswerImageConverter x:Key="AnswerImage" />
         <converters:NullToHiddenConverter x:Key="NullToHidden" />
-        
-        <Style TargetType="Border" x:Key="ButtonBorder">
+
+        <Style TargetType="Border" x:Key="ButtonResultBorder">
             <Setter Property="Margin" Value="7" />
             <Setter Property="CornerRadius" Value="7" />
         </Style>
@@ -49,16 +49,10 @@
 
     </UserControl.Resources>
     
-    <Grid Background="#FFF7E5FF">
+    <Grid Background="#99F7E5FF">
 
         <Grid Visibility="{Binding UnansweredQuestions, Converter={StaticResource NullToHidden}}">
 
-            <Label x:Name="Timer"
-                   Content="{Binding TimeLeft}"
-                   FontWeight="Bold"
-                   FontSize="30"
-                   VerticalAlignment="Top"
-                   HorizontalAlignment="Right" />
 
             <Grid>
                 <Grid.RowDefinitions>
@@ -91,7 +85,7 @@
                         </Grid.RowDefinitions>
 
                         <Border Grid.Row="0" Grid.Column="0"
-                                Style="{StaticResource ButtonBorder}"
+                                Style="{StaticResource ButtonResultBorder}"
                                 Background="{Binding ActiveAnswers[0].Color, Converter={StaticResource AnswerColor}}">
                             <Button Command="{Binding GuessAnswerCommand}" 
                                     CommandParameter="{Binding ActiveAnswers[0]}">
@@ -100,7 +94,7 @@
                         </Border>
 
                         <Border Grid.Row="0" Grid.Column="1"
-                                Style="{StaticResource ButtonBorder}"
+                                Style="{StaticResource ButtonResultBorder}"
                                 Background="{Binding ActiveAnswers[1].Color, Converter={StaticResource AnswerColor}}">
                             <Button Command="{Binding GuessAnswerCommand}"
                                     CommandParameter="{Binding ActiveAnswers[1]}">
@@ -109,7 +103,7 @@
                         </Border>
 
                         <Border Grid.Row="1" Grid.Column="0"
-                                Style="{StaticResource ButtonBorder}"
+                                Style="{StaticResource ButtonResultBorder}"
                                 Background="{Binding ActiveAnswers[2].Color, Converter={StaticResource AnswerColor}}">
                             <Button Command="{Binding GuessAnswerCommand}"
                                     CommandParameter="{Binding ActiveAnswers[2]}">
@@ -118,7 +112,7 @@
                         </Border>
 
                         <Border Grid.Row="1" Grid.Column="1"
-                                Style="{StaticResource ButtonBorder}"
+                                Style="{StaticResource ButtonResultBorder}"
                                 Background="{Binding ActiveAnswers[3].Color, Converter={StaticResource AnswerColor}}">
                             <Button Command="{Binding GuessAnswerCommand}"
                                     CommandParameter="{Binding ActiveAnswers[3]}">
@@ -138,6 +132,22 @@
                     </Grid>
                 </StackPanel>
             </Grid>
+            
+            <Border VerticalAlignment="Top"
+                    HorizontalAlignment="Right"
+                    Background="#afff"
+                    BorderBrush="{StaticResource DefaultBorderColor}"
+                    BorderThickness="1"
+                    Margin="5"
+                    CornerRadius="{StaticResource DefaultCornerRadius}">
+                <Label x:Name="Timer"
+                       Content="{Binding TimeLeft}"
+                       FontWeight="Bold"
+                       FontSize="30"
+                       Width="65"
+                       HorizontalContentAlignment="Center" />
+            </Border>
+            
         </Grid>
 
         <Grid Visibility="{Binding ResultScreen, Converter={StaticResource NullToHidden}}">

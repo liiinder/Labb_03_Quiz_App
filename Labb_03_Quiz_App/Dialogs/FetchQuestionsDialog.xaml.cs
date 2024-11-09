@@ -12,7 +12,8 @@ namespace Labb_03_Quiz_App.Dialogs
         {
             InitializeComponent();
 
-            //DataContext = (App.Current.MainWindow as MainWindow)?.DataContext;
+            DataContext = (App.Current.MainWindow as MainWindow)?.DataContext;
+            Owner = App.Current.MainWindow;
         }
         private void CloseCommandHandler(object sender, ExecutedRoutedEventArgs e) => Close();
     }

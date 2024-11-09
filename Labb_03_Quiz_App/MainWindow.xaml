@@ -17,6 +17,7 @@
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
     </Window.Resources>
+    
     <Window.InputBindings>
         <KeyBinding Key="Insert" Command="{Binding ConfigViewModel.AddQuestionCommand}" />
         <KeyBinding Key="Delete" Command="{Binding ConfigViewModel.DeleteQuestionCommand}" />
@@ -26,6 +27,7 @@
         <KeyBinding Key="Enter" Modifiers="Alt" Command="{Binding FullScreenCommand}" />
         <KeyBinding Key="I" Modifiers="Ctrl" Command="{Binding ImportQuestionsCommand}" />
     </Window.InputBindings>
+    
     <Grid>
 
         <Grid.RowDefinitions>
