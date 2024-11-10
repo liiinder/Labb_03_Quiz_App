@@ -37,7 +37,7 @@ namespace Labb_03_Quiz_App.ViewModels
         public ObservableCollection<Category> Categories { get; set; }
         public ConfigViewModel ConfigViewModel { get; }
         public GameViewModel GameViewModel { get; }
-        public OpenTDb OpenTDbApi { get; set; }
+        public OpenTDb OpenTDbAPI { get; set; }
         public string CurrentMode { get; set; }
         public bool InConfigMode
         {
@@ -65,6 +65,7 @@ namespace Labb_03_Quiz_App.ViewModels
         //TODO: Clean up and add options to disable menu options if conditions is not met.
         // like only delete packs if there is a pack to delete
         // delete question menu option if any is selected
+        // Give the "CanImportOrPlay" a better name as it apparently is used for almost all config things.
 
         public bool CanImportOrPlay { get => (InConfigMode && ActivePack is not null); }
         public bool HasImportedCategories
@@ -98,7 +99,7 @@ namespace Labb_03_Quiz_App.ViewModels
 
             Categories = new ObservableCollection<Category>();
             Categories.Add(new Category(0, "Any"));
-            OpenTDbApi = new OpenTDb(Categories[0]);
+            OpenTDbAPI = new OpenTDb(Categories[0]);
 
             AddNewPackCommand = new DelegateCommand(AddNewPack, ConfigViewModel.CanModifyPacks);
             SelectPackCommand = new DelegateCommand(SelectPack, ConfigViewModel.CanModifyPacks);
@@ -130,6 +131,23 @@ namespace Labb_03_Quiz_App.ViewModels
             //TODO: Add some kind of feedback to the user under the "Import Category" button that this is importing...
             // Maybe a small loading animation?
             // And then the correct catch message if it doesnt work.
+
+            //TODO: Look into making the project/code more "SOLID"
+            //
+            // https://www.reddit.com/r/SwiftUI/comments/197q25y/where_do_you_put_your_api_functions_in_mvvm_in/
+            //
+            //TODO: Move API related things (models/methods) to a service folder/file
+
+            // Response Codes
+            // --------------
+            //The API appends a "Response Code" to each API Call to help tell developers what the API is doing.
+
+            //Code 0: Success Returned results successfully.
+            //Code 1: No Results Could not return results.The API doesn't have enough questions for your query. (Ex. Asking for 50 Questions in a Category that only has 20.)
+            //Code 2: Invalid Parameter Contains an invalid parameter. Arguements passed in aren't valid. (Ex. Amount = Five)
+            //Code 3: Token Not Found Session Token does not exist.
+            //Code 4: Token Empty Session Token has returned all possible questions for the specified query.Resetting the Token is necessary.
+            //Code 5: Rate Limit Too many requests have occurred.Each IP can only access the API once every 5 seconds.
         }
 
         public async Task ImportQuestions()
@@ -137,7 +155,7 @@ namespace Labb_03_Quiz_App.ViewModels
             string response = string.Empty;
             try
             {
-                response = await client.GetStringAsync(OpenTDbApi.Url);
+                response = await client.GetStringAsync(OpenTDbAPI.Url);
 
                 var deserialized = JsonSerializer.Deserialize<OpenTDb>(response);
                 if (deserialized is not null && deserialized.Response == 0)
@@ -160,7 +178,9 @@ namespace Labb_03_Quiz_App.ViewModels
             //TODO: Add response feedback to the user if the import fails
             // If it fails because there isnt enough questions, set slider to the amount that exists
 
-            //TODO: Look into making the project/code more "SOLID"
+            // Helper API Tools
+            // https://opentdb.com/api_count.php?category=CATEGORY_ID_HERE
+
         }
 
         public async Task LoadPacks()
