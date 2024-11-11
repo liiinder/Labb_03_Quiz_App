@@ -32,14 +32,13 @@ namespace Labb_03_Quiz_App.ViewModels
         {
             this.mainWindowViewModel = mainWindowViewModel;
 
-            AddQuestionCommand = new DelegateCommand(AddQuestion, CanModifyPacks);
-            DeleteQuestionCommand = new DelegateCommand(DeleteQuestion, CanModifyPacks);
-            PackOptionsCommand = new DelegateCommand(PackOptions, CanModifyPacks);
+            AddQuestionCommand = new DelegateCommand(AddQuestion);
+            DeleteQuestionCommand = new DelegateCommand(DeleteQuestion);
+            PackOptionsCommand = new DelegateCommand(PackOptions);
             SwapQuestionCommand = new DelegateCommand(SwapQuestion);
             Difficulties = Enum.GetValues(typeof(Difficulty)).Cast<Difficulty>().ToList();
         }
 
-        internal bool CanModifyPacks(object? arg) => IsActive;
         private void AddQuestion(object obj)
         {
             ActivePack?.Questions.Add(new Question());

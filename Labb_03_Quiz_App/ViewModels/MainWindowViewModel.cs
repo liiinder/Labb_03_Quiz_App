@@ -101,10 +101,10 @@ namespace Labb_03_Quiz_App.ViewModels
             Categories.Add(new Category(0, "Any"));
             OpenTDbAPI = new OpenTDb(Categories[0]);
 
-            AddNewPackCommand = new DelegateCommand(AddNewPack, ConfigViewModel.CanModifyPacks);
-            SelectPackCommand = new DelegateCommand(SelectPack, ConfigViewModel.CanModifyPacks);
-            DeletePackCommand = new DelegateCommand(DeletePack, ConfigViewModel.CanModifyPacks);
-            OpenImportQuestionsDialogCommand = new DelegateCommand(OpenImportQuestionDialog, ConfigViewModel.CanModifyPacks);
+            AddNewPackCommand = new DelegateCommand(AddNewPack);
+            SelectPackCommand = new DelegateCommand(SelectPack);
+            DeletePackCommand = new DelegateCommand(DeletePack);
+            OpenImportQuestionsDialogCommand = new DelegateCommand(OpenImportQuestionDialog);
             ExitWindowCommand = new DelegateCommand(ExitWindow);
             SwitchModeCommand = new DelegateCommand(SwitchMode);
             FullScreenCommand = new DelegateCommand(FullScreen);
@@ -140,14 +140,28 @@ namespace Labb_03_Quiz_App.ViewModels
 
             // Response Codes
             // --------------
-            //The API appends a "Response Code" to each API Call to help tell developers what the API is doing.
+            //Dictionary<int, string> ResponseMessageList = new Dictionary<int, string>()
+            //{
+            //    { 0, "Success Returned results successfully." },
+            //    { 1, "No Results Could not return results.The API doesn't have enough questions for your query. (Ex. Asking for 50 Questions in a Category that only has 20." },
+            //    { 2, "Invalid Parameter Contains an invalid parameter. Arguements passed in aren't valid. (Ex. Amount = Five)" },
+            //    { 3, "Token Not Found Session Token does not exist." },
+            //    { 4, "Token Empty Session Token has returned all possible questions for the specified query.Resetting the Token is necessary." },
+            //    { 5, "Rate Limit Too many requests have occurred.Each IP can only access the API once every 5 seconds." }
+            //};
 
-            //Code 0: Success Returned results successfully.
-            //Code 1: No Results Could not return results.The API doesn't have enough questions for your query. (Ex. Asking for 50 Questions in a Category that only has 20.)
-            //Code 2: Invalid Parameter Contains an invalid parameter. Arguements passed in aren't valid. (Ex. Amount = Five)
-            //Code 3: Token Not Found Session Token does not exist.
-            //Code 4: Token Empty Session Token has returned all possible questions for the specified query.Resetting the Token is necessary.
-            //Code 5: Rate Limit Too many requests have occurred.Each IP can only access the API once every 5 seconds.
+            //TODO If Response = 1 -> https://opentdb.com/api_count.php?category=14
+            // create backing model for this.
+            // {   
+            //      category_id: 14,
+            //      category_question_count:
+            //      {
+            //          total_question_count: 170,
+            //          total_easy_question_count: 69,
+            //          total_medium_question_count: 72,
+            //          total_hard_question_count: 29
+            //      }
+            // }
         }
 
         public async Task ImportQuestions()
@@ -214,6 +228,8 @@ namespace Labb_03_Quiz_App.ViewModels
             new FetchQuestionsDialog().ShowDialog();
         }
         //TODO: Add functionality so if you add questions from OpenTDb that it doesn't add duplicates
+        //TODO: Apparently that is already solved with a session token ->
+        // https://opentdb.com/api_token.php?command=request
 
         private void ExitWindow(object obj)
         {

@@ -15,8 +15,10 @@ namespace Labb_03_Quiz_App.Models
         public int Response { get; set; }
         [JsonPropertyName("results")]
         public List<Question> ListOfQuestions { get; set; }
-
-        // Testing ...
+        [JsonPropertyName("response_message")]
+        public string ResponseMessage { get; set; }
+        [JsonPropertyName("token")]
+        public string Token { get; set; }
 
         [JsonIgnore]
         public Category Cat
@@ -67,6 +69,8 @@ namespace Labb_03_Quiz_App.Models
         public OpenTDb()
         {
             Response = 0;
+            ResponseMessage = string.Empty;
+            Token = string.Empty;
             ListOfQuestions = new List<Question>();
             _difficulty = Difficulty.Any;
             _cat = new Category();
@@ -78,7 +82,8 @@ namespace Labb_03_Quiz_App.Models
             _cat = cat;
         }
 
-        //TODO: Bryta upp denna till Model/ViewModel, men ligger så här nu för att få det att få helheten att fungera först.
+        //TODO: Bryta upp denna till Model/ViewModel, men ligger så här... nu för att få det att få helheten att fungera först.
+        // Eller lägga som en separat grej i någon /Services mapp och ha interface samt returer.
 
         public event PropertyChangedEventHandler? PropertyChanged;
         public void RaisePropertyChanged([CallerMemberName] string? PropertyName = null)
@@ -87,5 +92,3 @@ namespace Labb_03_Quiz_App.Models
         }
     }
 }
-
-//TODO: Currently not in use... Will be used with ImportQuestions

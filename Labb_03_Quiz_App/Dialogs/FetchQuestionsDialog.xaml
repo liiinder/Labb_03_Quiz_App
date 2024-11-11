@@ -60,13 +60,13 @@
                 <Label Content="Category:" />
                 <ComboBox ToolTip="Select Category" 
                           ItemsSource="{Binding Categories}" 
-                          SelectedValue="{Binding OpenTDbApi.Cat}"
+                          SelectedValue="{Binding OpenTDbAPI.Cat}"
                           DisplayMemberPath="Name" />
 
                 <Label Content="Difficulty" />
                 <ComboBox ToolTip="Select Difficulty"
                           ItemsSource="{Binding ConfigViewModel.Difficulties}"
-                          SelectedValue="{Binding OpenTDbApi.Difficulty}" />
+                          SelectedValue="{Binding OpenTDbAPI.Difficulty}" />
 
                 <StackPanel Orientation="Horizontal">
 
@@ -81,7 +81,7 @@
                         IsSnapToTickEnabled="True"
                         Minimum="1"
                         Maximum="50"
-                        Value="{Binding OpenTDbApi.AmountOfQuestions}"
+                        Value="{Binding OpenTDbAPI.AmountOfQuestions}"
                         Foreground="DarkGray"/>
 
                 <Grid Margin="0 10 0 0">

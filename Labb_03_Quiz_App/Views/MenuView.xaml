@@ -36,8 +36,8 @@
                                 <Setter.Value>
                                     <MultiBinding Converter="{StaticResource SelectPackName}">
                                         <Binding Path="Name" />
+                                        <Binding Path="Questions.Count" />
                                         <Binding Path="Difficulty" />
-                                        <Binding Path="Questions" />
                                     </MultiBinding>
                                 </Setter.Value>
                             </Setter>
@@ -50,7 +50,7 @@
 
                 <MenuItem Header="_Delete Question Pack" 
                           Icon="{fa:Icon FolderMinus}"
-                          Command="{Binding CanImportOrPlay}"
+                          Command="{Binding DeletePackCommand}"
                           IsEnabled="{Binding CanImportOrPlay}" />
                 
                 <Separator/>

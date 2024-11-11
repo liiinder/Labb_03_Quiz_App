@@ -1,0 +1,1 @@
+﻿för data mot lokal disk
