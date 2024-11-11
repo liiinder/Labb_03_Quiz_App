@@ -12,6 +12,7 @@
     <UserControl.Resources>
 
         <converters:NullToHiddenConverter x:Key="NullToHidden" />
+        <converters:NullToVisibleConverter x:Key="NullToVisible" />
 
         <Style BasedOn="{StaticResource ButtonStyle}" TargetType="{x:Type Button}">
             <Setter Property="Padding" Value="15 5" />
@@ -47,6 +48,19 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        
+        <!-- Add new question pack button if there is no ActivePack -->
+
+        <Border Grid.RowSpan="2"
+                Grid.ColumnSpan="2"
+                Padding="30"
+                Visibility="{Binding DataContext.ActivePack, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource NullToVisible}}">
+            <Button Content="New Question Pack"
+                    Width="200"
+                    Height="100"
+                    Command="{Binding DataContext.AddNewPackCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+        </Border>
 
         <!-- Left side -->
 
@@ -141,5 +155,6 @@
                 
             </StackPanel>
         </Border>
+        
     </Grid>
 </UserControl>

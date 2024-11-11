@@ -17,8 +17,6 @@ namespace Labb_03_Quiz_App.Models
         public List<Question> ListOfQuestions { get; set; }
         [JsonPropertyName("response_message")]
         public string ResponseMessage { get; set; }
-        [JsonPropertyName("token")]
-        public string Token { get; set; }
 
         [JsonIgnore]
         public Category Cat
@@ -53,7 +51,6 @@ namespace Labb_03_Quiz_App.Models
                 RaisePropertyChanged("Url");
             }
         }
-
         [JsonIgnore]
         public string Url
         {
@@ -70,7 +67,6 @@ namespace Labb_03_Quiz_App.Models
         {
             Response = 0;
             ResponseMessage = string.Empty;
-            Token = string.Empty;
             ListOfQuestions = new List<Question>();
             _difficulty = Difficulty.Any;
             _cat = new Category();

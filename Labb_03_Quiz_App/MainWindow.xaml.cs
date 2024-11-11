@@ -22,6 +22,7 @@ namespace Labb_03_Quiz_App
         {
             await mainWindowVM.LoadPacks();
             await mainWindowVM.ImportCategories();
+            //await mainWindowVM.OpenTDbAPI.ImportQuestions();
         }
     }
 }

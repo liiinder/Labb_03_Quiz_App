@@ -30,6 +30,7 @@ namespace Labb_03_Quiz_App.Dialogs
             if (DataContext is MainWindowViewModel mainWindowVM)
             {
                 await mainWindowVM.ImportQuestions();
+
                 Close();
             }
         }
