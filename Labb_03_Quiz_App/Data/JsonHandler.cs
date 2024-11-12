@@ -1,7 +1,4 @@
-﻿using Labb_03_Quiz_App.ViewModels;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Text.Json;
+﻿using System.IO;
 
 namespace Labb_03_Quiz_App.Data
 {
@@ -11,11 +8,11 @@ namespace Labb_03_Quiz_App.Data
         private static string pathToFile = Path.Combine(pathToFolder, "QuestionPacks.json");
         // Setup a generalized Json Handler.
 
-        public void SaveToFile(ObservableCollection<QuestionPackViewModel> packs)
-        {
-            string jsonString = JsonSerializer.Serialize(packs);
-            File.WriteAllText(pathToFile, jsonString);
-        }
+        //public void SaveToFile(ObservableCollection<QuestionPackViewModel> packs)
+        //{
+        //    string jsonString = JsonSerializer.Serialize(packs);
+        //    File.WriteAllText(pathToFile, jsonString);
+        //}
 
         //public async Task LoadPacks()
         //{
@@ -29,7 +26,6 @@ namespace Labb_03_Quiz_App.Data
         //    if (ActivePack is null && Packs.Count > 0) ActivePack = Packs[^1];
         //}
 
-        //TODO:  ??? hur ska jag göra med översta...
-        //TODO: Anropa en metod som anropar tasksen eller ?
+        //TODO: Implement this and remove it from MainWindowViewModel
     }
 }

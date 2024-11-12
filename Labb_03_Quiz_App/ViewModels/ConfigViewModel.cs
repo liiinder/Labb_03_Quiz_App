@@ -46,7 +46,7 @@ namespace Labb_03_Quiz_App.ViewModels
         }
         private void DeleteQuestion(object obj)
         {
-            if (ActivePack is not null)
+            if (ActivePack is not null && SelectedQuestion is not null)
             {
                 int SelectedIndex = ActivePack.Questions.IndexOf(SelectedQuestion);
 
@@ -60,10 +60,7 @@ namespace Labb_03_Quiz_App.ViewModels
                     }
                     else SelectedQuestion = ActivePack?.Questions[SelectedIndex];
                 }
-                else
-                {
-                    SelectedQuestion = null;
-                }
+                else SelectedQuestion = null;
             }
         }
         private void SwapQuestion(object obj)
@@ -72,10 +69,7 @@ namespace Labb_03_Quiz_App.ViewModels
             {
                 int SelectedIndex = ActivePack.Questions.IndexOf(SelectedQuestion);
 
-                if (SelectedQuestion == ActivePack?.Questions[^1])
-                {
-                    AddQuestionCommand.Execute(null);
-                }
+                if (SelectedQuestion == ActivePack?.Questions[^1]) AddQuestionCommand.Execute(null);
                 else SelectedQuestion = ActivePack?.Questions[SelectedIndex + 1];
             }
         }

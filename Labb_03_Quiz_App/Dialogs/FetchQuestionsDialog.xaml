@@ -29,6 +29,9 @@
     </Window.Resources>
 
     <Grid Background="#99E8E8F7">
+        
+        <!-- Button if no imported categories -->
+        
         <Border Padding="10 40"
                 Visibility="{Binding HasImportedCategories, Converter={StaticResource TrueToHidden}}">
             <StackPanel>
@@ -42,25 +45,21 @@
                 </TextBlock>
                 
                 <Button Content="Import Categories"
-                        Click="Import_Categories" 
+                        Click="Import_Categories"
                         Margin="0 20"/>
                 
             </StackPanel>
         </Border>
 
-        <!-- 
-        
-        Bind this to an object with all its members.
-        
-        -->
+        <!-- Import View -->
         
         <Border Padding="10"
                 Visibility="{Binding HasImportedCategories, Converter={StaticResource BoolToVisibility}}">
             <StackPanel>
                 <Label Content="Category:" />
                 <ComboBox ToolTip="Select Category" 
-                          ItemsSource="{Binding Categories}" 
-                          SelectedValue="{Binding OpenTDbAPI.Cat}"
+                          ItemsSource="{Binding OpenTDbAPI.Categories}" 
+                          SelectedValue="{Binding OpenTDbAPI.ChoosenCategory}"
                           DisplayMemberPath="Name" />
 
                 <Label Content="Difficulty" />

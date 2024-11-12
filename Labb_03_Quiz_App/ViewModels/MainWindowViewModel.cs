@@ -1,10 +1,8 @@
 ﻿using Labb_03_Quiz_App.Commands;
 using Labb_03_Quiz_App.Dialogs;
 using Labb_03_Quiz_App.Importer.OpenTDbAPI;
-using Labb_03_Quiz_App.Models;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Net;
 using System.Net.Http;
 using System.Text.Json;
 using System.Windows;
@@ -35,10 +33,9 @@ namespace Labb_03_Quiz_App.ViewModels
             }
         }
         public ObservableCollection<QuestionPackViewModel> Packs { get; set; }
-        public ObservableCollection<Category> Categories { get; set; }
         public ConfigViewModel ConfigViewModel { get; }
         public GameViewModel GameViewModel { get; }
-        public OpenTDb OpenTDbAPI { get; set; }
+        public OpenTDbAPI OpenTDbAPI { get; set; }
         public string CurrentMode { get; set; }
         public bool InConfigMode
         {
@@ -64,10 +61,13 @@ namespace Labb_03_Quiz_App.ViewModels
             }
         }
 
-        //TODO: Clean up and add options to disable menu options if conditions is not met.
+        //TODO: Clean up props/fields and add options to disable menu options if conditions is not met.
         // like only delete packs if there is a pack to delete
         // delete question menu option if any is selected
         // Give the "CanImportOrPlay" a better name as it apparently is used for almost all config things.
+
+        //TODO: Test out more with the command methods CanExecute() / RaiseCanExecuteChanged()
+        // Would help with the above TODO.
 
         public bool CanImportOrPlay { get => (InConfigMode && ActivePack is not null); }
         public bool HasImportedCategories
@@ -99,10 +99,7 @@ namespace Labb_03_Quiz_App.ViewModels
             ActivePack = null;
             Packs = new ObservableCollection<QuestionPackViewModel>();
 
-            Categories = new ObservableCollection<Category>();
-            Categories.Add(new Category(0, "Any"));
-            OpenTDbAPI = new OpenTDb(Categories[0]);
-            //TODO: call for token after initialize OpenTDbAPI.
+            OpenTDbAPI = new OpenTDbAPI();
 
             AddNewPackCommand = new DelegateCommand(AddNewPack);
             SelectPackCommand = new DelegateCommand(SelectPack);
@@ -111,78 +108,9 @@ namespace Labb_03_Quiz_App.ViewModels
             ExitWindowCommand = new DelegateCommand(ExitWindow);
             SwitchModeCommand = new DelegateCommand(SwitchMode);
             FullScreenCommand = new DelegateCommand(FullScreen);
-            //TODO: Test out more with the command methods CanExecute() / RaiseCanExecuteChanged()
         }
 
-        public async Task ImportCategories()
-        {
-            string response = string.Empty;
-            try
-            {
-                response = await client.GetStringAsync("api_category.php");
-
-                var jsonDeserialized = JsonSerializer.Deserialize<Categories>(response);
-                if (jsonDeserialized is not null)
-                {
-                    foreach (Category cat in jsonDeserialized.ListOfCategories) Categories.Add(cat);
-                }
-                HasImportedCategories = true;
-            }
-            catch
-            {
-                MessageBox.Show("Failed connection to OpenTDb, check your internet connection.", "OpenTDb", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-
-
-            //TODO: Look into making the project/code more "SOLID"
-            //
-            // https://www.reddit.com/r/SwiftUI/comments/197q25y/where_do_you_put_your_api_functions_in_mvvm_in/
-            //
-            //TODO: Move API related things (models/methods) to a service folder/file?
-        }
-
-        public async Task ImportQuestions()
-        {
-            string response = string.Empty;
-            OpenTDbAPI deserialized = new();
-
-            //TODO: Add token check.
-            try
-            {
-                response = await client.GetStringAsync(OpenTDbAPI.Url);
-
-                deserialized = JsonSerializer.Deserialize<OpenTDbAPI>(response);
-                if (deserialized is not null && deserialized.Response == 0)
-                {
-                    foreach (Question q in deserialized.ListOfQuestions)
-                    {
-                        Question temp = new();
-                        temp.Query = WebUtility.HtmlDecode(q.Query);
-                        temp.CorrectAnswer = WebUtility.HtmlDecode(q.CorrectAnswer);
-                        temp.IncorrectAnswers = q.IncorrectAnswers.Select(item => WebUtility.HtmlDecode(item)).ToArray();
-                        ActivePack?.Questions.Add(temp);
-                    }
-                    ConfigViewModel.SelectedQuestion = ActivePack?.Questions[^1];
-                }
-            }
-            catch
-            {
-                MessageBox.Show("Failed connection to OpenTDb, check your internet connection.", "OpenTDb", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-
-            //TODO: New API not fully implemented, just using it here for the Responsmessages
-            // But soon this whole method will be deleted from MainWindowViewModel and be in the Importer/OpenTDbAPI class instead.
-            if (deserialized?.Response is int responseId)
-            {
-                if (responseId == 0)
-                {
-                    MessageBox.Show(deserialized?.ResponseMessages[responseId], "OpenTDb", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                else MessageBox.Show(deserialized?.ResponseMessages[responseId], "OpenTDb", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        //TODO: Load Packs should be moved into Data/JsonHandler.cs
+        //TODO: Load/Save packs should be moved into Data/JsonHandler.cs
         public async Task LoadPacks()
         {
             Directory.CreateDirectory(pathToFolder);
@@ -191,9 +119,20 @@ namespace Labb_03_Quiz_App.ViewModels
             string json = await File.ReadAllTextAsync(pathToFile);
 
             var loadedPacks = JsonSerializer.Deserialize<ObservableCollection<QuestionPackViewModel>>(json);
-            foreach (QuestionPackViewModel pack in loadedPacks) Packs.Add(pack);
-            if (ActivePack is null && Packs.Count > 0) ActivePack = Packs[^1];
+
+            if (loadedPacks is not null)
+            {
+                foreach (QuestionPackViewModel pack in loadedPacks) Packs.Add(pack);
+                if (ActivePack is null && Packs.Count > 0) ActivePack = Packs[^1];
+            }
         }
+        private void ExitWindow(object obj)
+        {
+            string jsonString = JsonSerializer.Serialize(Packs);
+            File.WriteAllText(pathToFile, jsonString);
+            Environment.Exit(0);
+        }
+
         private void AddNewPack(object obj)
         {
             ActivePack = new QuestionPackViewModel(new QuestionPack());
@@ -202,25 +141,23 @@ namespace Labb_03_Quiz_App.ViewModels
         }
         private void SelectPack(object obj)
         {
-            if (obj is QuestionPackViewModel q) ActivePack = q;
+            if (obj is QuestionPackViewModel q && ActivePack != q) ActivePack = q;
         }
         private void DeletePack(object obj)
         {
             Packs.Remove(ActivePack);
             ActivePack = (Packs.Count > 0) ? Packs[^1] : null;
         }
+
         private void OpenImportQuestionDialog(object obj)
         {
             new FetchQuestionsDialog().ShowDialog();
+            //TODO: Look into options of refactor dialog from ViewModel.
+            // Try out this solution? https://www.youtube.com/watch?app=desktop&v=S8hEjLahNtU
+            // Would also help with the dialog in "AddNewPack"
+            // Might also work to clean up the SwitchMode method below.
         }
 
-        // save should be moved to Data/JsonHandler.cs
-        private void ExitWindow(object obj)
-        {
-            string jsonString = JsonSerializer.Serialize(Packs);
-            File.WriteAllText(pathToFile, jsonString);
-            Environment.Exit(0);
-        }
         private void SwitchMode(object obj)
         {
             if (obj is string button)

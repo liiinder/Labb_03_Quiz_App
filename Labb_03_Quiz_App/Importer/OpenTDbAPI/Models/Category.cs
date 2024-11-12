@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Labb_03_Quiz_App.Models
+namespace Labb_03_Quiz_App.Importer.OpenTDbAPI.Models
 {
     internal class Category
     {

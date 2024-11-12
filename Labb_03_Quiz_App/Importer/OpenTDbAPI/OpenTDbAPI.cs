@@ -1,111 +1,40 @@
 ﻿using Labb_03_Quiz_App.DataTypes;
+using Labb_03_Quiz_App.Importer.OpenTDbAPI.Models;
 using Labb_03_Quiz_App.Models;
 using Labb_03_Quiz_App.ViewModels;
-using System.ComponentModel;
 using System.Net;
 using System.Net.Http;
-using System.Runtime.CompilerServices;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Windows;
 
 namespace Labb_03_Quiz_App.Importer.OpenTDbAPI
 {
-    internal class OpenTDbAPI : INotifyPropertyChanged
+    internal class OpenTDbAPI
     {
         private static readonly HttpClient client = new HttpClient() { BaseAddress = new Uri("https://opentdb.com/") };
 
-        private Category _choosenCategory;
-        private Difficulty _difficulty;
-        private int _amountOfQuestions;
-        private string _token;
+        public Category ChoosenCategory { get; set; }
+        public Difficulty Difficulty { get; set; }
+        public int AmountOfQuestions { get; set; }
+        public Dictionary<string, QuestionPackViewModel> TokenDict { get; set; }
 
-        [JsonPropertyName("response_code")]
-        public int? Response { get; set; }
-
-        [JsonPropertyName("response_message")]
-        public string ResponseMessage { get; set; }
-
-        [JsonIgnore]
+        public DateTime LatestImport { get; set; }
         public Dictionary<int, string> ResponseMessages { get; set; }
-
-        [JsonPropertyName("results")]
-        public List<Question> ListOfQuestions { get; set; }
-
-        [JsonPropertyName("token")]
-        public string Token
-        {
-            get => _token;
-            set
-            {
-                _token = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged("Url");
-            }
-        }
-
-        [JsonIgnore]
-        public Category ChoosenCategory
-        {
-            get => _choosenCategory;
-            set
-            {
-                _choosenCategory = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged("Url");
-            }
-        }
-
-        [JsonIgnore]
         public List<Category> Categories { get; set; }
-
-        [JsonIgnore]
-        public Difficulty Difficulty
-        {
-            get => _difficulty;
-            set
-            {
-                _difficulty = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged("Url");
-            }
-        }
-
-        [JsonIgnore]
-        public int AmountOfQuestions
-        {
-            get => _amountOfQuestions;
-            set
-            {
-                _amountOfQuestions = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged("Url");
-            }
-        }
-
-        [JsonIgnore]
-        public string Url
-        {
-            get
-            {
-                string difficulty = (Difficulty == Difficulty.Any) ? "" : $"&difficulty={Difficulty.ToString().ToLower()}";
-                string category = (ChoosenCategory.Id == 0) ? "" : $"&category={ChoosenCategory.Id}";
-                string token = (Token == string.Empty) ? "" : $"&token={Token}";
-
-                return $"api.php?amount={AmountOfQuestions}{category}{difficulty}{token}&type=multiple";
-            }
-        }
 
         public OpenTDbAPI()
         {
-            Response = null;
-            ResponseMessage = string.Empty;
-            _token = string.Empty;
-            ListOfQuestions = new List<Question>();
-            _difficulty = Difficulty.Any;
-            _choosenCategory = new Category();
+            TokenDict = new Dictionary<string, QuestionPackViewModel>();
+
+            LatestImport = DateTime.Now.Subtract(TimeSpan.FromSeconds(10));
+
             Categories = new List<Category>();
-            _amountOfQuestions = 5;
+            Categories.Add(new Category(0, "Any"));
+
+            ChoosenCategory = Categories[0];
+            Difficulty = Difficulty.Any;
+            AmountOfQuestions = 5;
+
             ResponseMessages = new Dictionary<int, string>()
             {
                 { 0, "Success Returned results successfully." },
@@ -117,21 +46,13 @@ namespace Labb_03_Quiz_App.Importer.OpenTDbAPI
             };
         }
 
-        public OpenTDbAPI(Category cat) : this()
+        public string GetUrl(string? token)
         {
-            _choosenCategory = cat;
-        }
+            token = (token is null) ? "" : $"&token={token}";
+            string difficulty = (Difficulty == Difficulty.Any) ? "" : $"&difficulty={Difficulty.ToString().ToLower()}";
+            string category = (ChoosenCategory.Id == 0) ? "" : $"&category={ChoosenCategory.Id}";
 
-        // Move list of categories here.
-
-        //TODO: Bryta upp denna till Model/ViewModel, men ligger så här... nu för att få det att få helheten att fungera först.
-        // Eller lägga som en separat grej i någon /Services mapp och ha interface samt returer.
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        public void RaisePropertyChanged([CallerMemberName] string? PropertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(PropertyName));
+            return $"api.php?amount={AmountOfQuestions}{category}{difficulty}&type=multiple{token}";
         }
 
         public async Task<bool> ImportCategories()
@@ -140,13 +61,11 @@ namespace Labb_03_Quiz_App.Importer.OpenTDbAPI
             {
                 var response = await client.GetStringAsync("api_category.php");
 
-                var jsonDeserialized = JsonSerializer.Deserialize<Categories>(response);
+                var deserialized = JsonSerializer.Deserialize<Categories>(response);
 
-                // temporary test... 
-                List<Category> Categories = new();
-                if (jsonDeserialized is not null)
+                if (deserialized is not null)
                 {
-                    foreach (Category cat in jsonDeserialized.ListOfCategories) Categories.Add(cat);
+                    foreach (Category cat in deserialized.ListOfCategories) Categories.Add(cat);
                 }
                 return true;
             }
@@ -157,45 +76,72 @@ namespace Labb_03_Quiz_App.Importer.OpenTDbAPI
             return false;
         }
 
-        public async Task<QuestionPackViewModel> ImportQuestions(QuestionPackViewModel pack)
+        public async Task<string?> GetToken(QuestionPackViewModel pack)
         {
-            string response = string.Empty;
-            OpenTDbAPI deserialized = new();
+            string? token = TokenDict.FirstOrDefault(x => x.Value == pack).Key;
 
-            //TODO: Add token check.
-            try
+            if (token is null)
             {
-                response = await client.GetStringAsync(Url);
-                deserialized = JsonSerializer.Deserialize<OpenTDbAPI>(response);
-
-                if (deserialized is not null && deserialized.Response == 0)
+                try
                 {
-                    foreach (Question q in deserialized.ListOfQuestions)
-                    {
-                        Question temp = new();
-                        temp.Query = WebUtility.HtmlDecode(q.Query);
-                        temp.CorrectAnswer = WebUtility.HtmlDecode(q.CorrectAnswer);
-                        temp.IncorrectAnswers = q.IncorrectAnswers.Select(item => WebUtility.HtmlDecode(item)).ToArray();
-                        pack.Questions.Add(temp);
-                    }
+                    var response = await client.GetStringAsync("api_token.php?command=request");
+                    var deserialized = JsonSerializer.Deserialize<Token>(response);
+
+                    if (deserialized is not null) TokenDict[deserialized.token] = pack;
+                    return deserialized?.token;
+                }
+                catch
+                {
+                    MessageBox.Show("Failed Token request, check your internet connection.", "OpenTDb", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
-            catch
-            {
-                MessageBox.Show("Failed connection to OpenTDb, check your internet connection.", "OpenTDb", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            else return token;
 
-            if (deserialized?.Response is int responseId)
-            {
-                if (responseId == 0)
-                {
-                    MessageBox.Show(deserialized?.ResponseMessages[responseId], "OpenTDb", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                else MessageBox.Show(deserialized?.ResponseMessages[responseId], "OpenTDb", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-
-            return pack;
+            return null;
         }
 
+        public async Task<bool> ImportQuestions(QuestionPackViewModel pack)
+        {
+            string? token = await GetToken(pack);
+
+            if (token is not null)
+            {
+                string response = string.Empty;
+                Questions? deserialized = new();
+                string url = GetUrl(token);
+
+                // Seems like OpenTDb autoreject instead of sending response_code: 5 when you use HttpClient (works in chrome)
+                if (DateTime.Now.Subtract(LatestImport) > TimeSpan.FromMilliseconds(5000))
+                {
+                    try
+                    {
+                        LatestImport = DateTime.Now;
+                        response = await client.GetStringAsync(url);
+                        deserialized = JsonSerializer.Deserialize<Questions>(response);
+
+                        if (deserialized is not null && deserialized.Response == 0)
+                        {
+                            foreach (Question q in deserialized.ListOfQuestions)
+                            {
+                                Question temp = new();
+                                temp.Query = WebUtility.HtmlDecode(q.Query);
+                                temp.CorrectAnswer = WebUtility.HtmlDecode(q.CorrectAnswer);
+                                temp.IncorrectAnswers = q.IncorrectAnswers.Select(item => WebUtility.HtmlDecode(item)).ToArray();
+                                pack.Questions.Add(temp);
+                            }
+                        }
+                        if (deserialized?.Response is int responseId)
+                        {
+                            if (responseId == 0) return true;
+                            MessageBox.Show(ResponseMessages[responseId], "OpenTDb", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
+                    catch { MessageBox.Show("Failed connection to OpenTDb, check your internet connection.", "OpenTDb", MessageBoxButton.OK, MessageBoxImage.Error); }
+                }
+                else MessageBox.Show(ResponseMessages[5], "OpenTDb", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else MessageBox.Show("No active token.", "OpenTDb", MessageBoxButton.OK, MessageBoxImage.Error);
+            return false;
+        }
     }
 }

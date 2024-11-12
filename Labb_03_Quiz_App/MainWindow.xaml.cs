@@ -21,8 +21,8 @@ namespace Labb_03_Quiz_App
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             await mainWindowVM.LoadPacks();
-            await mainWindowVM.ImportCategories();
-            //await mainWindowVM.OpenTDbAPI.ImportQuestions();
+            mainWindowVM.HasImportedCategories = await mainWindowVM.OpenTDbAPI.ImportCategories();
+            if (mainWindowVM.ActivePack is not null) await mainWindowVM.OpenTDbAPI.GetToken(mainWindowVM.ActivePack);
         }
     }
 }

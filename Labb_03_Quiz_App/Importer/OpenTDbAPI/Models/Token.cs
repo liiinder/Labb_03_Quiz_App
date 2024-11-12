@@ -1,13 +1,22 @@
-﻿namespace Labb_03_Quiz_App.Importer.OpenTDbAPI.Models
+﻿using System.Text.Json.Serialization;
+
+namespace Labb_03_Quiz_App.Importer.OpenTDbAPI.Models
 {
     internal class Token
     {
-        // https://opentdb.com/api.php?amount=10&token=YOURTOKENHERE
-        // Using same response messages as the rest... so this class might be unnesseary
-        //{
-        //    response_code: 0,
-        //    response_message: "Token Generated Successfully!",
-        //    token: "af8c988727320acbfecf0fd0b2c912e12ff36cbb22e29936af9e260654ba2d95"
-        //}
+        [JsonPropertyName("response_code")]
+        public int response_code { get; set; }
+        [JsonPropertyName("response_message")]
+        public string response_message { get; set; }
+        [JsonPropertyName("token")]
+        public string token { get; set; }
+
+        [JsonConstructor]
+        public Token(int response_code, string response_message, string token)
+        {
+            this.response_code = response_code;
+            this.response_message = response_message;
+            this.token = token;
+        }
     }
 }

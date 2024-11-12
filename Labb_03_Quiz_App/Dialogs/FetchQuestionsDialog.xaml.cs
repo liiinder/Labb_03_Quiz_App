@@ -22,35 +22,17 @@ namespace Labb_03_Quiz_App.Dialogs
         {
             if (DataContext is MainWindowViewModel mainWindowVM)
             {
-                await mainWindowVM.ImportCategories();
+                mainWindowVM.HasImportedCategories = await mainWindowVM.OpenTDbAPI.ImportCategories();
             }
         }
         private async void Import_Questions(object sender, RoutedEventArgs e)
         {
-            if (DataContext is MainWindowViewModel mainWindowVM)
+            if (DataContext is MainWindowViewModel mainWindowVM && mainWindowVM.ActivePack is not null)
             {
-                await mainWindowVM.ImportQuestions();
+                bool result = await mainWindowVM.OpenTDbAPI.ImportQuestions(mainWindowVM.ActivePack);
 
-                Close();
+                if (result) Close();
             }
         }
     }
 }
-
-//TODO: Implement ImportQuestions, Currently not fully in use...
-
-
-// https://opentdb.com/api_config.php
-
-// https://opentdb.com/api.php?amount=10&category=31&difficulty=easy&type=multiple
-
-//type: "multiple",
-//difficulty: "easy",
-//category: "Entertainment: Japanese Anime &amp; Manga",
-//question: "Who was a voice actor for the English dubbing of HOWL&#039;S MOVING CASTLE (2004)?",
-//correct_answer: "Christian Bale",
-//incorrect_answers: [
-//        "Matt Damon",
-//        "Joseph Gordon-Levitt",
-//        "Willem Dafoe"
-//    ]
