@@ -10,6 +10,7 @@ namespace Labb_03_Quiz_App
         public MainWindow()
         {
             InitializeComponent();
+            //TODO: Look into dependency injection / interface for importer and send it into the constructor instead of hardcoding/creating OpenTDbAPI in MainWindowViewModel construction.
             mainWindowVM = new MainWindowViewModel();
             DataContext = mainWindowVM;
         }
@@ -21,9 +22,7 @@ namespace Labb_03_Quiz_App
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //await mainWindowVM.LoadPacks();
-            JsonHandler json = new();
-            await json.LoadPacks(mainWindowVM);
+            await new JsonHandler().LoadPacks(mainWindowVM);
 
             mainWindowVM.HasImportedCategories = await mainWindowVM.OpenTDbAPI.ImportCategories();
             if (mainWindowVM.ActivePack is not null) await mainWindowVM.OpenTDbAPI.GetToken(mainWindowVM.ActivePack);
