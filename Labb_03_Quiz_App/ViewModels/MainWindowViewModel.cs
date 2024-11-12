@@ -30,6 +30,7 @@ namespace Labb_03_Quiz_App.ViewModels
                 ConfigViewModel.RaisePropertyChanged("ActivePack");
                 GameViewModel.RaisePropertyChanged("ActivePack");
                 RaisePropertyChanged("CanImportOrPlay");
+                RaisePropertyChanged("NoPacks");
             }
         }
         public ObservableCollection<QuestionPackViewModel> Packs { get; set; }
@@ -61,15 +62,20 @@ namespace Labb_03_Quiz_App.ViewModels
             }
         }
 
-        //TODO: Clean up props/fields and add options to disable menu options if conditions is not met.
-        // like only delete packs if there is a pack to delete
+        //TODO: Clean up props/fields
+        // like the "NoPacks/LoadedPacks/HasImportedCategories/CanImportOrPlay...
+
+        // and add options to disable menu options if conditions is not met.
         // delete question menu option if any is selected
         // Give the "CanImportOrPlay" a better name as it apparently is used for almost all config things.
+        // Or look into other ways to do theses bindings without special props.
 
         //TODO: Test out more with the command methods CanExecute() / RaiseCanExecuteChanged()
         // Would help with the above TODO.
 
         public bool CanImportOrPlay { get => (InConfigMode && ActivePack is not null); }
+        public bool NoPacks { get => (ActivePack is null && LoadedPacks == true); }
+        public bool LoadedPacks { get; set; }
         public bool HasImportedCategories
         {
             get => _hasImportedCategories;
@@ -125,6 +131,8 @@ namespace Labb_03_Quiz_App.ViewModels
                 foreach (QuestionPackViewModel pack in loadedPacks) Packs.Add(pack);
                 if (ActivePack is null && Packs.Count > 0) ActivePack = Packs[^1];
             }
+            LoadedPacks = true;
+            RaisePropertyChanged("NoPacks");
         }
         private void ExitWindow(object obj)
         {
