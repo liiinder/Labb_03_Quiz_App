@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using Labb_03_Quiz_App.ViewModels;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Text.Json;
 
 namespace Labb_03_Quiz_App.Data
 {
@@ -6,26 +9,29 @@ namespace Labb_03_Quiz_App.Data
     {
         private static string pathToFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Labb_03_Quiz_App");
         private static string pathToFile = Path.Combine(pathToFolder, "QuestionPacks.json");
-        // Setup a generalized Json Handler.
 
-        //public void SaveToFile(ObservableCollection<QuestionPackViewModel> packs)
-        //{
-        //    string jsonString = JsonSerializer.Serialize(packs);
-        //    File.WriteAllText(pathToFile, jsonString);
-        //}
+        //TODO: Setup a generalized Json Handler.
+        // And make it less dependent on MainWindowViewModel
 
-        //public async Task LoadPacks()
-        //{
-        //    Directory.CreateDirectory(pathToFolder);
-        //    if (!File.Exists(pathToFile)) File.WriteAllText(pathToFile, "[]");
+        public void SaveToFile(ObservableCollection<QuestionPackViewModel> packs)
+        {
+            string jsonString = JsonSerializer.Serialize(packs);
+            File.WriteAllText(pathToFile, jsonString);
+        }
 
-        //    string json = await File.ReadAllTextAsync(pathToFile);
+        public async Task LoadPacks(MainWindowViewModel mainWindowVM)
+        {
+            Directory.CreateDirectory(pathToFolder);
+            if (!File.Exists(pathToFile)) File.WriteAllText(pathToFile, "[]");
 
-        //    var loadedPacks = JsonSerializer.Deserialize<ObservableCollection<QuestionPackViewModel>>(json);
-        //    foreach (QuestionPackViewModel pack in loadedPacks) Packs.Add(pack);
-        //    if (ActivePack is null && Packs.Count > 0) ActivePack = Packs[^1];
-        //}
+            string json = await File.ReadAllTextAsync(pathToFile);
 
-        //TODO: Implement this and remove it from MainWindowViewModel
+            var loadedPacks = JsonSerializer.Deserialize<ObservableCollection<QuestionPackViewModel>>(json);
+            foreach (QuestionPackViewModel pack in loadedPacks) mainWindowVM.Packs.Add(pack);
+            if (mainWindowVM.ActivePack is null && mainWindowVM.Packs.Count > 0) mainWindowVM.ActivePack = mainWindowVM.Packs[^1];
+
+            mainWindowVM.LoadedPacks = true;
+            mainWindowVM.RaisePropertyChanged("NoPacks");
+        }
     }
 }

@@ -1,10 +1,10 @@
 ﻿using Labb_03_Quiz_App.Commands;
+using Labb_03_Quiz_App.Data;
 using Labb_03_Quiz_App.Dialogs;
 using Labb_03_Quiz_App.Importer.OpenTDbAPI;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Net.Http;
-using System.Text.Json;
 using System.Windows;
 
 namespace Labb_03_Quiz_App.ViewModels
@@ -116,28 +116,10 @@ namespace Labb_03_Quiz_App.ViewModels
             FullScreenCommand = new DelegateCommand(FullScreen);
         }
 
-        //TODO: Load/Save packs should be moved into Data/JsonHandler.cs
-        public async Task LoadPacks()
-        {
-            Directory.CreateDirectory(pathToFolder);
-            if (!File.Exists(pathToFile)) File.WriteAllText(pathToFile, "[]");
-
-            string json = await File.ReadAllTextAsync(pathToFile);
-
-            var loadedPacks = JsonSerializer.Deserialize<ObservableCollection<QuestionPackViewModel>>(json);
-
-            if (loadedPacks is not null)
-            {
-                foreach (QuestionPackViewModel pack in loadedPacks) Packs.Add(pack);
-                if (ActivePack is null && Packs.Count > 0) ActivePack = Packs[^1];
-            }
-            LoadedPacks = true;
-            RaisePropertyChanged("NoPacks");
-        }
         private void ExitWindow(object obj)
         {
-            string jsonString = JsonSerializer.Serialize(Packs);
-            File.WriteAllText(pathToFile, jsonString);
+            JsonHandler json = new();
+            json.SaveToFile(Packs);
             Environment.Exit(0);
         }
 
