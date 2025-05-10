@@ -1,8 +1,17 @@
 # Quiz App
 
+How to install and run this app
+- Clone this repo into you prefered IDE
+- Open the solution file (Labb_03_Quiz_App.sln)
+- And run the program
+- A JSON-file will be created on startup in %AppData%\Local\Labb_03_Quiz_App which will store all the QuizPacks.
+
+<br />
+
+# About the process
 This app was our [third assignment](/ASSIGNMENT.md) in our first course programming with C#.
-We got introduced to a lot of things including WPF, json, API's and the MVVM-pattern.
-I have done some work with json and API's before so my main focus for this assignment was to try and learn WPF/XAML as good as possible!
+We got introduced to a lot of things including WPF, JSON, API's and the MVVM-pattern.
+I have done some work with JSON and API's before so my main focus for this assignment was to try and learn WPF/XAML as good as possible!
 
 When our teacher presented the assignment he showed us a working app. I took his design and made my app look like his, but I refined it in many ways including rounded corners on all elements, color gradient on buttons to make them pop more and actually look like buttons, better aligned text/buttons/inputs etc.
 
@@ -10,16 +19,13 @@ The biggest problems I encountered during this project was funnily enough to mak
 
 Also one of the biggest AHA-moment I got during this project was when my classmates where discussing about how to show the right answer, as WPF's default behaviour when hovering a button was changing the color to blue and that was covering the color change and using images felt much harder. That AHA-moment I got was that I could just always have an image displayed on the buttons and just change the url like I changed the colors as an image without an url wont be displayed. In just 30 minutes the answers where also shown with an image and it made the app look much better and the code felt pretty efficient!
 
-In the end I'm very pleased and proud over the result. Here are some pictures of the app and if any want to download and try out out there is nothing needed to run it more than an IDE, it will create the json-file where all data is stored in your AppData\Local\Labb_03_Quiz_App .
+In the end I'm very pleased and proud over the result.
 
-
-<br/>
-<br/>
 <br/>
 
 # Demo pictures
 
-When you start the app your QuizPack gets loaded from a locally stored json-file and it saves when you close.
+When you start the app your QuizPack gets loaded from a locally stored JSON-file and it saves when you close.
 
 In the configuration mode you have the title of the quiz on the top left, followed by buttons for editing the QuizPack and buttons for add and remove questions.
 Then the questions is displayed on the left and if you select a question you can edit it and its answers on the right.
@@ -30,7 +36,7 @@ If you click the button for configure the quiz you get a dialog window where you
 
 ![](/presentation_images/EditQuizPack.jpg)
 
-In the File menu option you could create a new pack or swap between different packs you've already made. The menu is setup to have support for Alt navigation so ` Alt -> F -> N ` creates a new QuizPack and it also have support for hotkeys like ` Insert ` to add a question ` Delete ` to remove one ` Ctrl + P or E ` to swap between Edit and Play-mode.
+In the File menu option you could create a new pack or swap between different packs you've already made. The menu is setup to have support for Alt navigation so ` Alt -> F -> N ` creates a new QuizPack and it also have support for hotkeys like ` Insert ` to add a question ` Delete ` to remove, ` Ctrl + E or P ` to swap between Edit and Play-mode.
 
 ![](/presentation_images/ChangeQuizPack.JPG)
 
