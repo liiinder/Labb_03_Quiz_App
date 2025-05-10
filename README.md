@@ -1,133 +1,53 @@
-# Labb 3 - Quiz Configurator
+# Quiz App
 
-Vi bygger en applikation för att konfigurera quiz-frågor, och köra quiz-rundor. Appen ska skrivas i WPF och XAML, och byggas på Model-View-ViewModel (MVVM)-arkitektur.
+This app was our [third assignment](/ASSIGNMENT.md) in our first course programming with C#.
+We got introduced to a lot of things including WPF, json, API's and the MVVM-pattern.
+I have done some work with json and API's before so my main focus for this assignment was to try and learn WPF/XAML as good as possible!
 
-MVVM är ett arkitektoniskt designmönster i mjukvaruutveckling, som underlättar separationen av utvecklingen av ett grafiskt användargränssnitt från den underliggande back-end logiken. Vi kommer gemensamt gå igenom hur detta fungerar.
+When our teacher presented the assignment he showed us a working app and then read what was required. I took his design and refined it in many ways including rounded corners, gradient buttons, better aligned text/buttons/inputs etc.
 
-Eftersom vi har ganska begränsad tid, cirka 3 veckor, för att bygga projektet, och vi ännu inte gått igenom alla delar som kommer behövas, så kommer labben vara upplagd på så vis att vi, delvis, gör den gemensamt som en code-along, så att alla får grundstrukturen rätt.
+The biggest problems I encountered during this project was funnily enough to make the corner-radius on the comboboxes and overall how to style elements in WPF. It wasn't as straight forward as CSS that I'm more used to and simple things took some time to figure out. The MVVM-pattern was also pretty rought as I didn't feel like it had enough of "This is the best practice" and it was more of a "you can do it like this or this" so was pretty hard to figure out exactly how to open dialogs etc the "correct" way.
 
-Vi kommer även ha gemensam handledning / Q&A där vi gemensamt kollar på att lösa de problem som uppstår för er under utvecklingens gång.
+Also one of the biggest AHA-moment I got during this project was when my classmates where discussing about how to show the right answer as WPF's default hover button where covering the color change and using images felt much harder. That AHA-moment I got was that I could just always have an image displayed on the buttons and just change the url like I changed the colors as an image without an url wont be displayed. In just 30 minutes the answers where also shown with an image and it made the app look much better and the code felt pretty efficient!
 
-Jag har byggt ihop en (mer eller mindre) färdig version av projektet som ni kommer få tillgång till redan från början, så att ni själva kan prova att använda den färdiga mjukvaran och fundera kring hur jag löst olika delar i designen. Det är inget krav på att era lösningar ska se ut exakt som mina, utan se det mer som inspiration. Så länge er app uppfyller kraven för G, respektive VG, så kan ni välja att utforma den på ett annat sätt.
+In the end I'm very pleased and proud over the result. Here are some pictures of the app and if any want to download and try out out there is nothing needed to run it more than an IDE, it will create the json-file where all data is stored in your AppData\Local\Labb_03_Quiz_App .
 
-Låt oss börja med att kolla på appen jag byggt!
 
-Vi kommer bygga ihop appen från början, gemensamt, som en code-along med start från nästa kurstillfälle. Vi kommer använda oss av MVVM och Data binding, så koden kommer att vara annorlunda strukturerad än i uppgifterna vi gjort hittills. Därför föreslår jag att ni väntar med att börja skriva C#-kod tills vi sätter igång och gör det tillsammans.
+<br/>
+<br/>
+<br/>
 
-Det ni däremot kan börja med är att strukturera upp och skriva XAML-kod för de olika komponenterna ni kan se i min app.
+# Demo pictures
 
-Skapa en mapp i ert VisualStudio-projekt som ni döper till “Dialogs”; i denna kan ni skapa 2 nya fönster (Add->Window (WPF)): PackOptionsDialog.xaml, och CreateNewPackDialog.xaml; Om ni kollar i min app så är det dialogrutorna man får upp när man väljer Edit->Pack Options, respektive File->New Question Pack i menyn.
+When you start the app your QuizPack gets loaded from a locally stored json-file and it saves when you close.
 
-Skapa en annan mapp i ert VS-projekt som ni döper till “Views”; i denna kan ni skapa 3 nya UserControls: MenuView.xaml (i denna bygger ni programmets huvudmeny), ConfigurationView.xaml (denna innehåller de komponenter man ser när man är i konfigurationsläget (View->Edit)); PlayerView.xaml (denna innehåller de komponenter man ser när man är i spelläget (View->Play)).
+In the configuration mode you have the title of the quiz on the top left, followed by buttons for editing the QuizPack and buttons for add and remove questions.
+Then the questions is displayed on the left and if you select a question you can edit it and its answers on the right.
 
-MainWindow.xaml kommer i princip bestå av ovanstående kontroller på såvis att MenuView alltid kommer visas högst upp, och ConfigurationView ELLER PlayerView visas i resten av fönstret, beroende på vilket läge man är i. (För tillfället kan bara kommentera ut den ena eller andra för att testa hur det kommer se ut i respektive läge).
+![](/presentation_images/CustomizeQuizPacks.jpg)
 
-OBS! Det finns inget krav på att dessa måste vara klara tills vi börjar bygga gemensamt med code-along, utan detta är bara förslag om ni vill börja någonstans; så ni har lite förberett när vi kommer till de delarna. OCH, som sagt, implementera inte funktionalitet i C# / Code-behinds än, utan bygg bara upp struktur på komponenterna i XAML.
+If you click the button for configure the quiz you get a dialog window where you can change the name/difficulty/time-limit for the specific pack.
 
+![](/presentation_images/EditQuizPack.jpg)
 
-## Översikt över appens uppbyggnad
+In the File menu option you could create a new pack or swap between different packs you've already made. The menu is setup to have support for Alt navigation so ` Alt -> F -> N ` creates a new QuizPack and it also have support for hotkeys like ` Insert ` to add a question ` Delete ` to remove one ` Ctrl + P or E ` to swap between Edit and Play-mode.
 
-Appen består i huvudsak av två delar (för G-nivån): en “configurator” för att skapa paket med frågor; och en “player” där man kan köra quiz-rundor. För VG-nivån finns även en tredje del som ni hittar i menyn under File->Import Questions; denna del kopplar upp sig mot ett API online för att importera frågor från deras databas. Observera att denna delen inte är obligatorisk. För godkänt behöver all funktionalitet FÖRUTOM import via API fungera.
+![](/presentation_images/ChangeQuizPack.JPG)
 
+There is also an option to import questions from [Open Trivia Database](https://opentdb.com/).
+The user then gets to choose a category and difficulty if they want and then how many questions they want to import.
+It then uses an JWT-Token to remember us so if we then asks for more questions it wont give us the same questions.
+And if there is any errors or no more questions to get with that specific category/difficulty combination the user will get a error message explaining what happened.
 
-### Configuration Mode
+![](/presentation_images/OpenTdb.jpg)
 
-Man ska kunna bygga “Question Packs”, det vill säga “paket” med frågor. Man behöver kunna lägga till, ta bort, och redigera befintliga frågor. Alla frågor har fyra alternativ, varav ett korrekt. Man ska även kunna ändra inställningar för själva paketet “Pack Options”: Välja namn, märka upp med svårighetsgrad, samt sätta tidsgräns på frågorna. Man ska även kunna skapa nya “Packs”, och ta bort befintliga.
+When you're done with setting up your quiz you can play it! All the questions get randomized and then presented to the player and the player needs to answer within the time the QuizPack is set to. The answers position is also randomized so the players can't just remember it's position. When the player makes a guess the game shows us if it was right or wrong and show us the right answer. And when all questions are answered you get to see how many you got right and a button to restart.
 
-Det ska gå att lägga till / ta bort frågor på flera sätt: Via menyn, Via snabbknappar på tangentbordet, och via knappar i appen. Även “Pack Options” ska gå att öppna på alla 3 sätt.
+![](/presentation_images/PlayQuiz.JPG)
+![](/presentation_images/Result.jpg)
 
 
-### Play Mode
+<br/>
 
-När man startar play mode ska den visa hur många frågor det är i det aktiva “Frågepaketet”, samt vilken fråga man är på i turordning. Man ska alltså svara på alla frågor i paketet innan man får ett resultat som visar hur många rätt man hade. Ordningen frågorna visas i ska dock slumpas från gång till gång; likadant med ordningen som svarsalternativen visas i. Det ska finnas någon form av timer som räknar ner (betänketid per fråga ska gå att ställa in när man konfigurerar packen), och efter man klickat på ett svar (eller tiden tar slut) ska användaren få feedback på om man svarat rätt/fel, samt vilket det korrekta svarsalternativet är.
-
-Det behöver dock inte se ut som i mitt exempel så länge funktionaliteten ovan finns på plats. Vill man till exempel visa tiden i form av en cirkel/klockvisare, eller markera svarsalternativen med olika färger på knapparna istället för ikoner så går det bra.
-
-
-### Menyn
-
-Menyn ska ha ikoner för de olika alternativen (t.ex med font-awesome). Meny alternativen ska gå att aktivera från tangentbordet både med snabbvalsknappar, och med alt-knappen, till exempel Ctrl+O, samt Alt+E, O för “Pack Options”.
-
-
-### Json
-
-Appen ska spara paket och frågor i Json, så att man kan ladda in dem vid ett senare tillfälle. 
-
-Du kan välja att göra detta på ett av följande två sätt:
-
-1. Skapa en json fil i en mapp under användarens AppData\Local som lagrar samtliga “question packs” och laddar in dem automatiskt när programmet startar. Detta är alternativet jag gjort i min app. För att hitta mappen kan du använda:
-Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-Tänk på att programmet ska fungera även om mappen och/eller filen inte finns; den måste i så fall skapa upp mapp / fil.
-
-2. Använd OpenFileDialog() / SaveFileDialog() och låt användaren spara/ladda varje “question pack” i en separat fil.
-
-Oavsett alternativ så ska filerna sparas och läsas in asynkront.
-
-
-
-### Full Screen
-
-Det ska finnas ett menyalternativ för att köra programmet i helskärmsläge.
-
-
-
-Importera frågor via API ( VG-uppgift )
-
-Open Trivia Database tillhandahåller quiz-frågor via ett öppet API på https://opentdb.com
-
-Användaren ska kunna välja bland alla frågekategorier som opentdb tillhandahåller. Dessutom ska man kunna välja svårighetsgrad, samt hur många frågor man vill importera. 
-
-Anropen till API:et ska göras asynkront så att GUI inte låses upp medan man hämtar kategorier / frågor.
-
-Felhantering måste fungera, och användaren ska få veta om operationen gått bra eller om något gått fel (i så fall vad som gått fel). Responskoder, och vad dessa innebär, går att hitta i API:ets dokumentation. Tänk även på att andra fel (än felkoder från API:et) kan uppstå, t.ex om din dator inte har någon internetanslutning… detta ska inte krascha programmet.
-
-
-
-### Redovisning
-
-Uppgiften ska lösas individuellt. (Vi gör delar gemensamt, men alla skriver sin egen kod).  
-Checka in din lösning som ett NYTT repo på Github.  
-Lämna in uppgiften på ithsdistans med en kommentar med github-länken.
-
-
-
-## Betygskriterier
-
-
-### För godkänt
-
-- Appen ska vara byggd med MVVM, och i huvudsak använda data binding och commands.
-
-- Minimera koden i XAML-filernas code-behind.
-
-- Appen ska asynkront lagra och läsa in “frågepaket” i json.
-
-- Man ska kunna lägga till, ta bort, och konfigurera frågepaket (namn, tid, svårighetsgrad).
-
-- Frågor ska kunna läggas till / tas bort via tangentbord, menyalternativ och knappar i app.
-
-- I spelläget ska alla frågor och svar i ett paket visas i slumpmässigt vald ordning.
-
-- Förvald betänketid ska visas och räkna ner.
-
-- Korrekt svar och spelaren svar ska visas, innan appen går vidare till nästa fråga.
-
-- Efter alla frågor gått igenom visas ett resultat.
-
-- Det ska finnas ett helskärmsläge.
-
-
-
-### För väl godkänt
-
-- Man ska kunna importera frågor från Open Trivia Database, via deras API.
-
-- Man kan välja kategori, svårighetsgrad och antal frågor som ska importeras.
-
-- All kommunikation med API:et sker via asynkrona anrop.
-
-- Felhantering ska fungera och användaren ska informeras om status på importen.
-
-- För VG ställs även större krav på att självständigt kunna utveckla applikationen och hitta lösningar på buggar och andra problem. (Det betyder inte att man inte får fråga om man kör fast eller undrar över något, men jag kommer prioritera att hjälpa alla att få godkänt i första hand).
-
-- Det är också högre krav på kvalitet vad gäller kod, UI-design och testning.
+Thanks for reading!<br/>
+/ Kristoffer Linder
