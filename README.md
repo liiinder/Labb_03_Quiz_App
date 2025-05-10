@@ -1,6 +1,5 @@
-# Quiz App
+# Quiz App - How to setup
 
-How to install and run this app
 - Clone this repo into you prefered IDE
 - Open the solution file (Labb_03_Quiz_App.sln)
 - And run the program
