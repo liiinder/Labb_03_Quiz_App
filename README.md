@@ -2,7 +2,7 @@
 
 - Clone this repo into you prefered IDE
 - Open the solution file (Labb_03_Quiz_App.sln)
-- And run the program
+- Run the program
 - A JSON-file will be created on startup in %AppData%\Local\Labb_03_Quiz_App which will store all the QuizPacks.
 
 <br />
